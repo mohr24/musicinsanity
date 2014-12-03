@@ -65,9 +65,11 @@ class User extends CActiveRecord
 			'recommendations' => array(self::MANY_MANY, 'Recommendation', 'sys_recom(uid, rid)'),
 			'artists' => array(self::MANY_MANY, 'Artist', 'user_artist(uid, aid)'),
 			'concerts' => array(self::MANY_MANY, 'Concert', 'user_concert(uid, cid)'),
-			'userFollows' => array(self::HAS_MANY, 'UserFollow', 'uid'),
-			'userFollows1' => array(self::HAS_MANY, 'UserFollow', 'fuid'),
+			//'userFollows' => array(self::HAS_MANY, 'UserFollow', 'uid'),
+			//'userFollows1' => array(self::HAS_MANY, 'UserFollow', 'fuid'),
 			'musictypes' => array(self::MANY_MANY, 'Musictype', 'user_musictype(uid, type_name)'),
+            'usersFollowed' => array(self::MANY_MANY, 'User', 'user_follow(uid,fuid)'),
+            'usersFollowing' => array(self::MANY_MANY, 'User', 'user_follow(fuid,uid)'),
 		);
 	}
 

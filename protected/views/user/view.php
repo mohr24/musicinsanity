@@ -31,4 +31,63 @@ $this->menu=array(
 		'reputation',
 		'last_login_tp',
 	),
+));?>
+<br/>
+<h1>Artists this user is a fan of</h1>
+<?php $this->widget('zii.widgets.CListView',array(
+
+    'dataProvider'=>$dataProviderArtists,
+    /*'columns'=>array( // this array should include the attributes you want to display
+        'aname',
+        'abio',
+    ),*/
+    'itemView'=>'//artist/_view',
+
+)); ?>
+<?php $this->widget('zii.widgets.grid.CGridView',array(
+
+    'dataProvider'=>$dataProviderArtists,
+    'columns'=>array( // this array should include the attributes you want to display
+        'aname',
+        'abio',
+    ),
+
+
+)); ?>
+<table width = 500>
+    <tr>
+        <th> Artist Name</th>
+        <th> Bio</th>
+    </tr>
+
+    <?php foreach ($model->artists as $artist): ?>
+        <tr>
+            <td><?= CHtml::encode("{$artist->aname}") ?></td>
+            <td><?= CHtml::encode("{$artist->abio}") ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+<br/>
+<h1>Users this user is following</h1>
+<?php $this->widget('zii.widgets.CListView',array(
+
+    'dataProvider'=>$dataProviderFollowing,
+    /*'columns'=>array( // this array should include the attributes you want to display
+        'aname',
+        'abio',
+    ),*/
+    'itemView'=>'_view',
+
+)); ?>
+<br/>
+<h1>Concerts this user plans to attend</h1>
+<?php $this->widget('zii.widgets.CListView',array(
+
+    'dataProvider'=>$dataProviderFollowing,
+    /*'columns'=>array( // this array should include the attributes you want to display
+        'aname',
+        'abio',
+    ),*/
+    'itemView'=>'_view',
+
 )); ?>
