@@ -51,8 +51,35 @@ class UserController extends Controller
 	 */
 	public function actionView($id)
 	{
+        $userModel = $this->loadModel($id);
+        $dataProviderArtists=new CArrayDataProvider($userModel->artists, array(
+            'keyField'=>'aid',
+            /*'id'=>'user',
+            'sort'=>array(
+                'attributes'=>array(
+                    'id', 'username', 'email',
+                ),
+            ),
+            'pagination'=>array(
+                'pageSize'=>10,
+            ),*/
+        ));
+        $dataProviderFollowing=new CArrayDataProvider($userModel->usersFollowed, array(
+            'keyField'=>'uid',
+            /*'id'=>'user',
+            'sort'=>array(
+                'attributes'=>array(
+                    'id', 'username', 'email',
+                ),
+            ),
+            'pagination'=>array(
+                'pageSize'=>10,
+            ),*/
+        ));
 		$this->render('view',array(
-			'model'=>$this->loadModel($id),
+			'model'=>$userModel,
+            'dataProviderArtists'=>$dataProviderArtists,
+            'dataProviderFollowing'=>$dataProviderFollowing,
 		));
 	}
 
