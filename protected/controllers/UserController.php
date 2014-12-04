@@ -76,10 +76,30 @@ class UserController extends Controller
                 'pageSize'=>10,
             ),*/
         ));
+        $concertinfo = Yii::app()->db->createCommand()
+            // ->select('co.course_name, cl.section_id')
+            ->select('c.cid,c.cdate,a.aname,v.vname')
+            ->from('concert c, artist a, venue v, user_concert uc')
+            ->where('uc.uid = :uid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid',
+                array(':uid'=>$userModel->uid,))
+            ->queryAll();
+        $dataProviderConcerts=new CArrayDataProvider($concertinfo, array(
+            'keyField'=>'cid',
+         //   'id'=>'cid',
+            /* 'sort'=>array(
+                 'attributes'=>array(
+                     'id', 'username', 'email',
+                 ),
+             ),
+             'pagination'=>array(
+                 'pageSize'=>10,
+             ),*/
+        ));
 		$this->render('view',array(
 			'model'=>$userModel,
             'dataProviderArtists'=>$dataProviderArtists,
             'dataProviderFollowing'=>$dataProviderFollowing,
+            'dataProviderConcerts'=>$dataProviderConcerts,
 		));
 	}
 
