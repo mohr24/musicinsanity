@@ -61,7 +61,7 @@ class User extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'lists' => array(self::HAS_MANY, 'List', 'uid'),
+			'lists' => array(self::HAS_MANY, 'ListModel', 'uid'),
 			'recommendations' => array(self::MANY_MANY, 'Recommendation', 'sys_recom(uid, rid)'),
 			'artists' => array(self::MANY_MANY, 'Artist', 'user_artist(uid, aid)'),
 			'concerts' => array(self::MANY_MANY, 'Concert', 'user_concert(uid, cid)'),

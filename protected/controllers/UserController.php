@@ -95,11 +95,49 @@ class UserController extends Controller
                  'pageSize'=>10,
              ),*/
         ));
+        $recommendations = Recommendation::model()->findAllBySql('select r.* from
+          Recommendation r, list l, user_follow uf
+          where uf.uid = :uid and uf.fuid = l.uid and r.lid = l.lid
+          order by r.recom_tp',array(':uid'=>$userModel->uid));
+        $recommendations = Yii::app()->db->createCommand()
+            // ->select('co.course_name, cl.section_id')
+            ->select('r.rid,r.rdate,a.aname,v.vname')
+            ->from('recommendation r, list l, user_follow uf, artist a, venue v')
+            ->where('uf.uid = :uid and uf.fuid = l.uid and r.lid = l.lid and
+                 r.aid = a.aid and r.vid = v.vid',
+                array(':uid'=>$userModel->uid,))
+            ->queryAll();
+        $dataProviderRecommendations=new CArrayDataProvider($recommendations, array(
+            'keyField'=>'rid',
+            //   'id'=>'cid',
+            /* 'sort'=>array(
+                 'attributes'=>array(
+                     'id', 'username', 'email',
+                 ),
+             ),
+             'pagination'=>array(
+                 'pageSize'=>10,
+             ),*/
+        ));
+        $dataProviderLists=new CArrayDataProvider($userModel->lists, array(
+            'keyField'=>'lid',
+            //   'id'=>'cid',
+            /* 'sort'=>array(
+                 'attributes'=>array(
+                     'id', 'username', 'email',
+                 ),
+             ),
+             'pagination'=>array(
+                 'pageSize'=>10,
+             ),*/
+        ));
 		$this->render('view',array(
 			'model'=>$userModel,
             'dataProviderArtists'=>$dataProviderArtists,
             'dataProviderFollowing'=>$dataProviderFollowing,
             'dataProviderConcerts'=>$dataProviderConcerts,
+            'dataProviderRecommendations'=>$dataProviderRecommendations,
+            'dataProviderLists'=>$dataProviderLists,
 		));
 	}
 

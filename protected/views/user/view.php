@@ -85,10 +85,29 @@ $this->menu=array(
 
     'dataProvider'=>$dataProviderConcerts,
     'columns'=>array( // this array should include the attributes you want to display
-        'cid',
         'aname',
         'cdate',
         'vname',
     ),
+
+)); ?>
+    <br/>
+    <h1>Recommended concerts from this users followers</h1>
+<?php $this->widget('zii.widgets.grid.CGridView',array(
+
+    'dataProvider'=>$dataProviderRecommendations,
+    'columns'=>array( // this array should include the attributes you want to display
+        'aname',
+        'rdate',
+        'vname',
+    ),
+
+)); ?>
+    <br/>
+    <h1>User's Lists</h1>
+<?php $this->widget('zii.widgets.CListView',array(
+
+    'dataProvider'=>$dataProviderLists,
+    'itemView'=>'//list/_view',
 
 )); ?>
