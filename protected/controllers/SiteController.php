@@ -27,9 +27,67 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('index');
+        $user_id = Yii::app()->user->getId();
+
+        $upcomingConcerts = Yii::app()->db->createCommand()
+            // ->select('co.course_name, cl.section_id')
+            ->select('c.cid,c.cdate,a.aname,v.vname')
+            ->from('concert c, artist a, venue v, user_artist ua')
+            ->where('ua.uid = :uid and ua.aid = a.aid and c.aid = a.aid and c.vid = v.vid and
+              (c.cdate between CURRENT_DATE() and (CURRENT_DATE() + interval 14 day)) ',
+                array(':uid'=>$user_id,))
+            ->queryAll();
+        //add attending column
+        foreach($upcomingConcerts as $i=>$concert){
+            $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>$user_id,':cid'=>$concert['cid']));
+            if($userConcert){
+                $upcomingConcerts[$i]['attending']="yes";
+            }else{
+                $upcomingConcerts[$i]['attending']="no";
+            }
+        }
+        $dataProviderConcerts=new CArrayDataProvider($upcomingConcerts, array(
+            'keyField'=>'cid',
+            //   'id'=>'cid',
+            /* 'sort'=>array(
+                 'attributes'=>array(
+                     'id', 'username', 'email',
+                 ),
+             ),
+             'pagination'=>array(
+                 'pageSize'=>10,
+             ),*/
+        ));
+        $recentReviews = Yii::app()->db->createCommand()
+            // ->select('co.course_name, cl.section_id')
+            ->select('c.cid,c.cdate,a.aname,v.vname, u2.uname, uc.review, uc.rate')
+            ->from('concert c, artist a, venue v, user_concert uc, user_follow uf, user u2')
+            ->where('uf.uid = :uid and uf.fuid = u2.uid and u2.uid = uc.uid and uc.cid = c.cid and c.aid = a.aid and c.vid = v.vid and
+              (c.cdate between (CURRENT_DATE() - interval 14 day) and CURRENT_DATE()) ',
+                array(':uid'=>$user_id,))
+            ->queryAll();
+        $dataProviderReviews = new CArrayDataProvider($recentReviews, array(
+            'keyField'=>'cid',
+
+        ));
+        $ArtistsYouMightLike = Artist::model()->findAllBySql('select a.*, count(u2.uid) from artist a, user u1, user u2, user_artist ua2
+            where u1.uid = :uid and u2.uid in
+            (select u22.uid from user_artist ua21, user_artist ua22, user u22
+            where ua21.uid=u1.uid and ua21.aid=ua22.aid and ua22.uid = u22.uid and u22.uid != u1.uid
+            group by u22.uid
+            having count(ua22.aid)>1) and ua2.uid = u2.uid and ua2.aid = a.aid
+            and a.aid not in (select ua31.aid from user_artist ua31 where ua31.uid = u1.uid)
+            group by a.aid
+            having count(u2.uid) > 1',array(':uid'=>$user_id));
+        $dataProviderArtists = new CArrayDataProvider($ArtistsYouMightLike, array(
+            'keyField'=>'aid',
+
+        ));
+		$this->render('index',array(
+            'dataProviderConcerts'=>$dataProviderConcerts,
+            'dataProviderReviews'=>$dataProviderReviews,
+            'dataProviderArtists'=>$dataProviderArtists,
+        ));
 	}
 
 	/**

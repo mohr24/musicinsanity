@@ -76,29 +76,44 @@ class UserController extends Controller
                 'pageSize'=>10,
             ),*/
         ));
-        $concertinfo = Yii::app()->db->createCommand()
+        $futureconcertinfo = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
-            ->select('c.cid,c.cdate,a.aname,v.vname')
+            ->select('c.cid,c.cdate, a.aid ,a.aname,v.vname')
             ->from('concert c, artist a, venue v, user_concert uc')
-            ->where('uc.uid = :uid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid',
-                array(':uid'=>$userModel->uid,))
+            ->where('uc.uid = :uid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid and c.cdate>:today',
+                array(':uid'=>$userModel->uid,':today'=>new CDbExpression('NOW()') ))
             ->queryAll();
-        $dataProviderConcerts=new CArrayDataProvider($concertinfo, array(
+        $dataProviderFutureConcerts=new CArrayDataProvider($futureconcertinfo, array(
             'keyField'=>'cid',
          //   'id'=>'cid',
-            /* 'sort'=>array(
+             'sort'=>array(
                  'attributes'=>array(
-                     'id', 'username', 'email',
+                     'cdate',
                  ),
              ),
              'pagination'=>array(
                  'pageSize'=>10,
-             ),*/
+             ),
         ));
-        $recommendations = Recommendation::model()->findAllBySql('select r.* from
-          Recommendation r, list l, user_follow uf
-          where uf.uid = :uid and uf.fuid = l.uid and r.lid = l.lid
-          order by r.recom_tp',array(':uid'=>$userModel->uid));
+        $futureconcertinfo = Yii::app()->db->createCommand()
+            // ->select('co.course_name, cl.section_id')
+            ->select('c.cid,c.cdate, a.aid ,a.aname,v.vname')
+            ->from('concert c, artist a, venue v, user_concert uc')
+            ->where('uc.uid = :uid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid and c.cdate>:today',
+                array(':uid'=>$userModel->uid,':today'=>new CDbExpression('CURRENT_DATE()') ))
+            ->queryAll();
+        $dataProviderFutureConcerts=new CArrayDataProvider($futureconcertinfo, array(
+            'keyField'=>'cid',
+            //   'id'=>'cid',
+            'sort'=>array(
+                'attributes'=>array(
+                    'cdate',
+                ),
+            ),
+            'pagination'=>array(
+                'pageSize'=>10,
+            ),
+        ));
         $recommendations = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
             ->select('r.rid,r.rdate,a.aname,v.vname')
@@ -135,7 +150,7 @@ class UserController extends Controller
 			'model'=>$userModel,
             'dataProviderArtists'=>$dataProviderArtists,
             'dataProviderFollowing'=>$dataProviderFollowing,
-            'dataProviderConcerts'=>$dataProviderConcerts,
+            'dataProviderFutureConcerts'=>$dataProviderFutureConcerts,
             'dataProviderRecommendations'=>$dataProviderRecommendations,
             'dataProviderLists'=>$dataProviderLists,
 		));

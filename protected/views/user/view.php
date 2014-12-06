@@ -81,14 +81,15 @@ $this->menu=array(
 )); ?>
 <br/>
 <h1>Concerts this user plans to attend</h1>
-<?php $this->widget('zii.widgets.grid.CGridView',array(
+<?php $this->widget('zii.widgets.CListView',array(
 
     'dataProvider'=>$dataProviderConcerts,
-    'columns'=>array( // this array should include the attributes you want to display
+   /* 'columns'=>array( // this array should include the attributes you want to display
         'aname',
         'cdate',
         'vname',
-    ),
+    ),*/
+    'itemView'=>'//concert/_view_with_names',
 
 )); ?>
     <br/>
