@@ -114,6 +114,26 @@ class UserController extends Controller
                 'pageSize'=>10,
             ),
         ));
+        $pastconcertinfo = Yii::app()->db->createCommand()
+            // ->select('co.course_name, cl.section_id')
+            ->select('c.cid,c.cdate, a.aid ,a.aname,v.vname, uc.rate, uc.review')
+            ->from('concert c, artist a, venue v, user_concert uc')
+            ->where('uc.uid = :uid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid and
+            (c.cdate between (CURRENT_DATE() - interval 30 day) and CURRENT_DATE())',
+                array(':uid'=>$userModel->uid ))
+            ->queryAll();
+        $dataProviderPastConcerts=new CArrayDataProvider($pastconcertinfo, array(
+            'keyField'=>'cid',
+            //   'id'=>'cid',
+            'sort'=>array(
+                'attributes'=>array(
+                    'cdate',
+                ),
+            ),
+            'pagination'=>array(
+                'pageSize'=>10,
+            ),
+        ));
         $recommendations = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
             ->select('r.rid,r.rdate,a.aname,v.vname')
@@ -151,6 +171,7 @@ class UserController extends Controller
             'dataProviderArtists'=>$dataProviderArtists,
             'dataProviderFollowing'=>$dataProviderFollowing,
             'dataProviderFutureConcerts'=>$dataProviderFutureConcerts,
+            'dataProviderPastConcerts'=>$dataProviderPastConcerts,
             'dataProviderRecommendations'=>$dataProviderRecommendations,
             'dataProviderLists'=>$dataProviderLists,
 		));
