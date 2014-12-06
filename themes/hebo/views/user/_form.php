@@ -55,17 +55,7 @@
 		<?php echo $form->error($model,'city_residence'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'reputation'); ?>
-		<?php echo $form->textField($model,'reputation'); ?>
-		<?php echo $form->error($model,'reputation'); ?>
-	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'last_login_tp'); ?>
-		<?php echo $form->textField($model,'last_login_tp'); ?>
-		<?php echo $form->error($model,'last_login_tp'); ?>
-	</div>
 
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>

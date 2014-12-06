@@ -83,13 +83,25 @@ $this->menu=array(
 <h1>Concerts this user plans to attend</h1>
 <?php $this->widget('zii.widgets.CListView',array(
 
-    'dataProvider'=>$dataProviderConcerts,
+    'dataProvider'=>$dataProviderFutureConcerts,
    /* 'columns'=>array( // this array should include the attributes you want to display
         'aname',
         'cdate',
         'vname',
     ),*/
     'itemView'=>'//concert/_view_with_names',
+
+)); ?>
+    <h1>Recently Attended Concerts</h1>
+<?php $this->widget('zii.widgets.CListView',array(
+
+    'dataProvider'=>$dataProviderPastConcerts,
+    /* 'columns'=>array( // this array should include the attributes you want to display
+         'aname',
+         'cdate',
+         'vname',
+     ),*/
+    'itemView'=>'//concert/_view_with_names_and_ratings',
 
 )); ?>
     <br/>

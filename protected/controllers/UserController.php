@@ -28,13 +28,13 @@ class UserController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view','create'),
 				'users'=>array('*'),
 			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+			/*array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
 				'users'=>array('@'),
-			),
+			),*/
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
 				'users'=>array('admin'),
@@ -76,25 +76,7 @@ class UserController extends Controller
                 'pageSize'=>10,
             ),*/
         ));
-        $futureconcertinfo = Yii::app()->db->createCommand()
-            // ->select('co.course_name, cl.section_id')
-            ->select('c.cid,c.cdate, a.aid ,a.aname,v.vname')
-            ->from('concert c, artist a, venue v, user_concert uc')
-            ->where('uc.uid = :uid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid and c.cdate>:today',
-                array(':uid'=>$userModel->uid,':today'=>new CDbExpression('NOW()') ))
-            ->queryAll();
-        $dataProviderFutureConcerts=new CArrayDataProvider($futureconcertinfo, array(
-            'keyField'=>'cid',
-         //   'id'=>'cid',
-             'sort'=>array(
-                 'attributes'=>array(
-                     'cdate',
-                 ),
-             ),
-             'pagination'=>array(
-                 'pageSize'=>10,
-             ),
-        ));
+
         $futureconcertinfo = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
             ->select('c.cid,c.cdate, a.aid ,a.aname,v.vname')
@@ -191,11 +173,13 @@ class UserController extends Controller
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
+            $model->reputation=0;
+            $model->last_login_tp= new CDbExpression('CURRENT_DATE()');
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->uid));
+				$this->redirect(array('//site/login'));
 		}
 
-		$this->render('create',array(
+		$this->render('//user/create',array(
 			'model'=>$model,
 		));
 	}

@@ -92,7 +92,7 @@ class SiteController extends Controller
             //render artist home page
         }
         else{
-            
+
             $this->render('index',array(
 
             ));
