@@ -2,8 +2,8 @@
 /* @var $this SiteController */
 
 $this->pageTitle=Yii::app()->name;
+$this->menu=array(array('label'=>'View Your List', 'url'=>array('/musicinsanity/index.php/list/index')));
 ?>
-
 <h1>Upcoming Concerts</h1>
 <?php $this->widget('zii.widgets.CListView',array(
 

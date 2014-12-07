@@ -8,25 +8,14 @@
         <!-- Include content pages -->
         <?php echo $content; ?>
 	</div><!--/span-->
+
 <div class="span3">
+<h3>Operation Bar</h3>
 <div id="sidebar">
 <ul class="nav nav-list">
-<li><a href="#">Home</a></li>
 <li><a href= <?php echo $this->menu[0]['url'][0] ?> ><?php echo $this->menu[0]['label'] ?></a></li>
-<li><a href="#">Edit Your Profile</a></li>
-<li><a href="#">Search What You Want</a></li>
 </ul>
 
-<?php
-    $this->beginWidget('zii.widgets.CPortlet', array(
-                                                     'title'=>'Operations',
-                                                     ));
-    $this->widget('zii.widgets.CMenu', array(
-                                             'items'=>$this->menu,
-                                             'htmlOptions'=>array('class'=>'operations'),
-                                             ));
-    $this->endWidget();
-    ?>
 </div><!-- sidebar -->
     
   </div><!--/row-->

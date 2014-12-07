@@ -5,6 +5,7 @@ class SiteController extends Controller
 	/**
 	 * Declares class-based actions.
 	 */
+    //public $layout = '//layouts/index';
 	public function actions()
 	{
 		return array(
@@ -29,6 +30,7 @@ class SiteController extends Controller
 	{
         $user_id = Yii::app()->user->getId();
         if($user_id && !Yii::app()->user->artist){
+            $this->layout = '//layouts/column2';
             $upcomingConcerts = Yii::app()->db->createCommand()
                 // ->select('co.course_name, cl.section_id')
                 ->select('c.cid,c.cdate,a.aname, a.aid,v.vname, v.city')
@@ -90,6 +92,7 @@ class SiteController extends Controller
             ));
         }else if($user_id && Yii::app()->user->artist){
             //render artist home page
+            $this->layout = '//layouts/column2';
         }
         else{
 
