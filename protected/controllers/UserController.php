@@ -231,7 +231,7 @@ class UserController extends Controller
         $userFollowRecord->fuid=$thisUser;
         $userFollowRecord->follow_tp= new CDbExpression('CURRENT_DATE()');
         if($userFollowRecord->save())
-            $this->redirect('view/'.$thisUser);
+            $this->actionView($thisUser);
         else{
             print_r($userFollowRecord->getErrors());
         }
@@ -239,7 +239,7 @@ class UserController extends Controller
     public function actionUnfollow($thisUser){
         $userFollowRecord = UserFollow::model()->find('uid = :uid and fuid = :fuid',array(':uid'=>Yii::app()->user->getId(),':fuid'=>$thisUser));
         if($userFollowRecord->delete())
-            $this->redirect('view/'.$thisUser);
+            $this->actionView($thisUser);
         else{
             print_r($userFollowRecord->getErrors());
         }

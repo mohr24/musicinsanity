@@ -27,14 +27,14 @@ class ConcertController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
+            /*array('allow',  // allow all users to perform 'index' and 'view' actions
+                'actions'=>array('create'),
+                'users'=>array('*'),
+            ),*/
+            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                'actions'=>array('attend','update','unattend', 'review','index','view','create'),
+                'users'=>array('@'),
+            ),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
 				'users'=>array('admin'),
@@ -51,8 +51,19 @@ class ConcertController extends Controller
 	 */
 	public function actionView($id)
 	{
+        $concertModel = $this->loadModel($id);
+        if(Yii::app()->user->artist){
+            $is_artist = (Yii::app()->user->aid == $concertModel->aid);
+        }
+        else{
+            $is_artist=false;
+        }
+        $attending = UserConcert::model()->exists('uid = :uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$concertModel->cid));
 		$this->render('view',array(
-			'model'=>$this->loadModel($id),
+			'model'=>$concertModel,
+            'is_artist'=>$is_artist,
+            'attending'=>$attending,
+            'past' =>(new CDbExpression('CURRENT_DATE()>:date',array(':date'=>$concertModel->cdate))),
 		));
 	}
 
@@ -142,7 +153,56 @@ class ConcertController extends Controller
 			'model'=>$model,
 		));
 	}
+    public function actionAttend($id,$return){
+        $currentUser=Yii::app()->user->getId();
 
+        $userConcert = new UserConcert();
+        $userConcert->uid = $currentUser;
+        $userConcert->cid = $id;
+        if($userConcert->save()){
+            if($return == "home") {
+                $this->redirect('//site/index');
+            }else if($return == "page"){
+                $this->actionView($id);
+            }
+
+        }
+
+        else{
+            print_r($userConcert->getErrors());
+        }
+
+    }
+    public function actionUnattend($id,$return){
+        $userConcert = UserConcert::model()->find('uid = :uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$id));
+        if($userConcert->delete())
+            if($return == "home") {
+                $this->redirect('//site/index');
+            }else if($return == "page"){
+                $this->actionView($id);
+            }
+        else{
+            print_r($userConcert->getErrors());
+        }
+    }
+    public function actionReview($id,$return){
+        $userConcert = UserConcert::model()->find('uid = :uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$id));
+        if(isset($_POST['UserConcert']))
+        {
+            $userConcert->attributes=$_POST['UserConcert'];
+            $userConcert->attend_tp = new CDbExpression('CURRENT_DATE()');
+            if($userConcert->save())
+                if($return == "home") {
+                    $this->redirect('//site/index');
+                }else if($return == "page"){
+                    $this->redirect('view/'.$id);
+                }
+        }
+
+        $this->render('review',array(
+            'model'=>$userConcert,
+        ));
+    }
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.

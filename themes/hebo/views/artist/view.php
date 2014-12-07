@@ -8,9 +8,9 @@ $this->breadcrumbs=array(
 );
 
 if($follows){
-    $followButton = array('label'=>'Unfollow Artist', 'url'=>array('unfollow','thisArtist'=>$model->aid));
+    $followButton = array('label'=>'Unfollow Artist', 'url'=>array('unfollow?thisArtist='.$model->aid));
 }else{
-    $followButton = array('label'=>'Become a Fan', 'url'=>array('follow','thisArtist'=>$model->aid));
+    $followButton = array('label'=>'Become a Fan', 'url'=>array('follow?thisArtist='.$model->aid));
 }
 $this->menu=array(
     $followButton,

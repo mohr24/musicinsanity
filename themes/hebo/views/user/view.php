@@ -7,12 +7,12 @@ $this->breadcrumbs=array(
         $model->uid,
     );
 if($is_user){
-    $editProfile = array('label'=>'Edit your Profile', 'url'=>array('update','id'=>$model->uid));
+    $editProfile = array('label'=>'Edit your Profile', 'url'=>array('update?id='.$model->uid));
 }
 else if($follows){
-    $followLink = array('label'=>'Unfollow User', 'url'=>array('unfollow','thisUser'=>$model->uid));
+    $followLink = array('label'=>'Unfollow User', 'url'=>array('unfollow?thisUser='.$model->uid));
 }else{
-    $followLink = array('label'=>'Follow User', 'url'=>array('follow','thisUser'=>$model->uid));
+    $followLink = array('label'=>'Follow User', 'url'=>array('follow?thisUser='.$model->uid));
 }
 $this->menu=array();
 if(isset($followLink)){

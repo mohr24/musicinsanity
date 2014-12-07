@@ -190,7 +190,7 @@ class ArtistController extends Controller
         $userArtistRecord->aid=$thisArtist;
         $userArtistRecord->fan_tp= new CDbExpression('CURRENT_DATE()');
         if($userArtistRecord->save())
-            $this->redirect('view/'.$thisArtist);
+            $this->actionView($thisArtist);
         else{
             print_r($userArtistRecord->getErrors());
         }
@@ -198,7 +198,7 @@ class ArtistController extends Controller
     public function actionUnfollow($thisArtist){
         $userArtistRecord = UserArtist::model()->find('uid = :uid and aid = :aid',array(':uid'=>Yii::app()->user->getId(),':aid'=>$thisArtist));
         if($userArtistRecord->delete())
-            $this->redirect('view/'.$thisArtist);
+            $this->actionView($thisArtist);
         else{
             print_r($userArtistRecord->getErrors());
         }
