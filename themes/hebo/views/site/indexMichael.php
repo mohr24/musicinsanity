@@ -5,30 +5,18 @@ $this->pageTitle=Yii::app()->name;
 ?>
 
 <h1>Upcoming Concerts</h1>
-<?php $this->widget('zii.widgets.grid.CGridView',array(
+<?php $this->widget('zii.widgets.CListView',array(
 
     'dataProvider'=>$dataProviderConcerts,
-    'columns'=>array( // this array should include the attributes you want to display
-        'aname',
-        'cdate',
-        'vname',
-        'attending',
-    ),
+    'itemView'=>'//concert/_view_with_names',
 
 )); ?>
 <br/>
 <h1>Recent Concert Reviews</h1>
-<?php $this->widget('zii.widgets.grid.CGridView',array(
+<?php $this->widget('zii.widgets.CListView',array(
 
     'dataProvider'=>$dataProviderReviews,
-    'columns'=>array( // this array should include the attributes you want to display
-        'aname',
-        'cdate',
-        'vname',
-        'uname',
-        'rate',
-        'review',
-    ),
+    'itemView'=>'//concert/_view_with_names',
 
 )); ?>
 <br/>
@@ -40,6 +28,6 @@ $this->pageTitle=Yii::app()->name;
         'aname',
         'abio',
     ),*/
-    'itemView'=>'//artist/_view',
+    'itemView'=>'//artist/_view_short',
 
 )); ?>

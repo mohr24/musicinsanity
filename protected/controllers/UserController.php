@@ -28,13 +28,13 @@ class UserController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','create'),
+				'actions'=>array('create'),
 				'users'=>array('*'),
 			),
-			/*array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('follow','update','unfollow','index','view'),
 				'users'=>array('@'),
-			),*/
+			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
 				'users'=>array('admin'),
@@ -79,10 +79,10 @@ class UserController extends Controller
 
         $futureconcertinfo = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
-            ->select('c.cid,c.cdate, a.aid ,a.aname,v.vname')
+            ->select('c.cid,c.cdate, a.aid ,a.aname,v.vname, v.city')
             ->from('concert c, artist a, venue v, user_concert uc')
-            ->where('uc.uid = :uid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid and c.cdate>:today',
-                array(':uid'=>$userModel->uid,':today'=>new CDbExpression('CURRENT_DATE()') ))
+            ->where('uc.uid = :uid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid and c.cdate>CURRENT_DATE()',
+                array(':uid'=>$userModel->uid ))
             ->queryAll();
         $dataProviderFutureConcerts=new CArrayDataProvider($futureconcertinfo, array(
             'keyField'=>'cid',
@@ -98,7 +98,7 @@ class UserController extends Controller
         ));
         $pastconcertinfo = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
-            ->select('c.cid,c.cdate, a.aid ,a.aname,v.vname, uc.rate, uc.review')
+            ->select('c.cid,c.cdate, a.aid ,a.aname,v.vname, v.city, uc.rate, uc.review')
             ->from('concert c, artist a, venue v, user_concert uc')
             ->where('uc.uid = :uid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid and
             (c.cdate between (CURRENT_DATE() - interval 30 day) and CURRENT_DATE())',
@@ -116,7 +116,7 @@ class UserController extends Controller
                 'pageSize'=>10,
             ),
         ));
-        $recommendations = Yii::app()->db->createCommand()
+     /*   $recommendations = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
             ->select('r.rid,r.rdate,a.aname,v.vname')
             ->from('recommendation r, list l, user_follow uf, artist a, venue v')
@@ -134,28 +134,26 @@ class UserController extends Controller
              ),
              'pagination'=>array(
                  'pageSize'=>10,
-             ),*/
-        ));
+             ),
+        ));*/
         $dataProviderLists=new CArrayDataProvider($userModel->lists, array(
             'keyField'=>'lid',
-            //   'id'=>'cid',
-            /* 'sort'=>array(
-                 'attributes'=>array(
-                     'id', 'username', 'email',
-                 ),
-             ),
+
              'pagination'=>array(
                  'pageSize'=>10,
-             ),*/
+             ),
         ));
+        $follows = UserFollow::model()->exists('uid = :uid and fuid = :fuid',array(':uid'=>Yii::app()->user->getId(),':fuid'=>$userModel->uid));
 		$this->render('view',array(
 			'model'=>$userModel,
             'dataProviderArtists'=>$dataProviderArtists,
             'dataProviderFollowing'=>$dataProviderFollowing,
             'dataProviderFutureConcerts'=>$dataProviderFutureConcerts,
             'dataProviderPastConcerts'=>$dataProviderPastConcerts,
-            'dataProviderRecommendations'=>$dataProviderRecommendations,
+           //'dataProviderRecommendations'=>$dataProviderRecommendations,
             'dataProviderLists'=>$dataProviderLists,
+            'follows'=>$follows,
+            'is_user'=>(Yii::app()->user->getId() == $userModel->uid),
 		));
 	}
 
@@ -225,6 +223,27 @@ class UserController extends Controller
 	/**
 	 * Lists all models.
 	 */
+    public function actionFollow($thisUser){
+        $currentUser=Yii::app()->user->getId();
+
+        $userFollowRecord=new UserFollow();
+        $userFollowRecord->uid=$currentUser;
+        $userFollowRecord->fuid=$thisUser;
+        $userFollowRecord->follow_tp= new CDbExpression('CURRENT_DATE()');
+        if($userFollowRecord->save())
+            $this->redirect('view/'.$thisUser);
+        else{
+            print_r($userFollowRecord->getErrors());
+        }
+    }
+    public function actionUnfollow($thisUser){
+        $userFollowRecord = UserFollow::model()->find('uid = :uid and fuid = :fuid',array(':uid'=>Yii::app()->user->getId(),':fuid'=>$thisUser));
+        if($userFollowRecord->delete())
+            $this->redirect('view/'.$thisUser);
+        else{
+            print_r($userFollowRecord->getErrors());
+        }
+    }
 	public function actionIndex()
 	{
 		$dataProvider=new CActiveDataProvider('User');
@@ -262,6 +281,7 @@ class UserController extends Controller
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
+
 
 	/**
 	 * Performs the AJAX validation.

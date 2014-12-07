@@ -27,14 +27,14 @@ class ArtistController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
+            array('allow',  // allow all users to perform 'index' and 'view' actions
+                'actions'=>array('create'),
+                'users'=>array('*'),
+            ),
+            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                'actions'=>array('follow','update','unfollow','index','view'),
+                'users'=>array('@'),
+            ),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
 				'users'=>array('admin'),
@@ -51,8 +51,40 @@ class ArtistController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
+        $artistModel=$this->loadModel($id);
+        $dataProviderMusicType =new CArrayDataProvider($artistModel->musictypes, array(
+            'keyField'=>'type_name',
+        ));
+        $futureconcertinfo = Yii::app()->db->createCommand()
+            // ->select('co.course_name, cl.section_id')
+            ->select('c.cid,c.cdate, v.vname, v.city')
+            ->from('concert c, artist a, venue v')
+            ->where('a.aid = :aid and c.aid = a.aid and c.vid = v.vid and
+            (c.cdate between CURRENT_DATE() and (CURRENT_DATE() + interval 30 day))',
+                array(':aid'=>$artistModel->aid ))
+            ->queryAll();
+        $dataProviderUpcomingConcerts =new CArrayDataProvider($futureconcertinfo, array(
+            'keyField'=>'cid',
+        ));
+        $reviews = Yii::app()->db->createCommand()
+            // ->select('co.course_name, cl.section_id')
+            ->select('u.uid, u.uname, uc.rate, uc.review, c.cid, c.cdate, v.vname, v.city')
+            ->from('concert c, artist a, venue v, user_concert uc, user u')
+            ->where('a.aid = :aid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid and u.uid = uc.uid and
+            (c.cdate between (CURRENT_DATE() - interval 30 day) and CURRENT_DATE())',
+                array(':aid'=>$artistModel->aid ))
+            ->queryAll();
+        $dataProviderRecentReviews=new CArrayDataProvider($reviews, array(
+            'keyField'=>'cid',
+        ));
+        $follows = UserArtist::model()->exists('uid = :uid and aid = :aid',array(':uid'=>Yii::app()->user->getId(),':aid'=>$artistModel->aid));
+
+        $this->render('view',array(
 			'model'=>$this->loadModel($id),
+            'dataProviderMusicType'=>$dataProviderMusicType,
+            'dataProviderUpcomingConcerts'=>$dataProviderUpcomingConcerts,
+            'dataProviderRecentReviews'=>$dataProviderRecentReviews,
+            'follows'=>$follows,
 		));
 	}
 
@@ -150,6 +182,27 @@ class ArtistController extends Controller
 	 * @return Artist the loaded model
 	 * @throws CHttpException
 	 */
+    public function actionFollow($thisArtist){
+        $currentUser=Yii::app()->user->getId();
+
+        $userArtistRecord=new UserArtist();
+        $userArtistRecord->uid=$currentUser;
+        $userArtistRecord->aid=$thisArtist;
+        $userArtistRecord->fan_tp= new CDbExpression('CURRENT_DATE()');
+        if($userArtistRecord->save())
+            $this->redirect('view/'.$thisArtist);
+        else{
+            print_r($userArtistRecord->getErrors());
+        }
+    }
+    public function actionUnfollow($thisArtist){
+        $userArtistRecord = UserArtist::model()->find('uid = :uid and aid = :aid',array(':uid'=>Yii::app()->user->getId(),':aid'=>$thisArtist));
+        if($userArtistRecord->delete())
+            $this->redirect('view/'.$thisArtist);
+        else{
+            print_r($userArtistRecord->getErrors());
+        }
+    }
 	public function loadModel($id)
 	{
 		$model=Artist::model()->findByPk($id);

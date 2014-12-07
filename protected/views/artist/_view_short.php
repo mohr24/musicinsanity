@@ -7,7 +7,7 @@
 
 
     <b><?php echo CHtml::encode($data->getAttributeLabel('aname')); ?>:</b>
-    <?php echo CHtml::encode($data->aname); ?>
+    <?php echo CHtml::link(CHtml::encode($data['aname']), array('//artist/view', 'id'=>$data['aid'])) ?>
     <br />
 
 
@@ -22,4 +22,5 @@
 
 	*/ ?>
 
+    <br />
 </div>
