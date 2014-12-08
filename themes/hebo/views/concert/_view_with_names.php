@@ -20,7 +20,7 @@
 <?php
     //echo $data['cid'];
     if(isset($data['attending'])){
-    if(strcmp ( $data['attending'], "No" )){
+    if(strcmp ( $data['attending'], "Yes" )){
         echo CHtml::button('Unattend', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('concert/unattend',array('id'=>$data['cid'], 'return'=>"home"))));
     }
     else {
@@ -50,45 +50,6 @@
     CHtml::encode($data['attending']).
     '<br/>';
 }?>
-
-<div class="accordion" id="accordion2">
-<div class="accordion-group">
-<div class="accordion-heading">
-<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-Collapsible Group Item #1
-</a>
-</div>
-<div id="collapseOne" class="accordion-body collapse in">
-<div class="accordion-inner">
-Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.
-</div>
-</div>
-</div>
-<div class="accordion-group">
-<div class="accordion-heading">
-<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-Collapsible Group Item #2
-</a>
-</div>
-<div id="collapseTwo" class="accordion-body collapse">
-<div class="accordion-inner">
-Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.
-</div>
-</div>
-</div>
-<div class="accordion-group">
-<div class="accordion-heading">
-<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-Collapsible Group Item #3
-</a>
-</div>
-<div id="collapseThree" class="accordion-body collapse">
-<div class="accordion-inner">
-Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.
-</div>
-</div>
-</div>
-</div>
 
 </div>
 

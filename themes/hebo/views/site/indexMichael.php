@@ -11,14 +11,16 @@ $this->menu=array(array('label'=>'View Your List', 'url'=>array('/musicinsanity/
     'itemView'=>'//concert/_view_with_names',
 
 )); ?>
+<h5 style='float:right'><a href="#"> View All Upcoming Concerts</a></h5>
 <br/>
 <h1>Recent Concert Reviews</h1>
 <?php $this->widget('zii.widgets.CListView',array(
 
     'dataProvider'=>$dataProviderReviews,
-    'itemView'=>'//concert/_view_with_names',
+    'itemView'=>'//concert/_review_with_names',
 
 )); ?>
+<h5 style='float:right'><a href="#"> View All Recent Concerts</a></h5>
 <br/>
 <h1>Artists You Might Like</h1>
 <?php $this->widget('zii.widgets.CListView',array(
@@ -28,6 +30,6 @@ $this->menu=array(array('label'=>'View Your List', 'url'=>array('/musicinsanity/
         'aname',
         'abio',
     ),*/
-    'itemView'=>'//artist/_view_short',
+    'itemView'=>'//artist/_view',
 
 )); ?>
