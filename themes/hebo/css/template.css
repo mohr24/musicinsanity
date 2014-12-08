@@ -694,3 +694,39 @@ form .row{
 
 
 .cleaner { clear: both; width: 100%; height: 0px; font-size: 0px;  }
+
+.lt {
+    height: 10px;
+    color: #FFF;
+}
+
+.lbox {
+    padding: 3px 12px;
+    margin: 0 0 15px 0;
+    height: 178px;
+}
+
+.lbox a {
+    background: inherit;
+}
+
+.lbox h2 {
+    color: #FFFFFF;
+    background: #363636;
+}
+
+.lbox h2 .yellow{
+    color: #FFFCD1;
+    background: inherit;
+}
+
+.thumb {
+    float: left;
+    width: 150px;
+    border: 1px solid #d4d4d4;
+    color: #fff;
+    margin: 0 15px 15px 0;
+    padding: 5px;
+}
+
+.thumb p { margin: 0; padding: 3px; color: #FFF;}

@@ -13,7 +13,13 @@
 <h3>Operation Bar</h3>
 <div id="sidebar">
 <ul class="nav nav-list">
-<li><a href= <?php echo $this->menu[0]['url'][0] ?> ><?php echo $this->menu[0]['label'] ?></a></li>
+<?php
+    foreach ($this->menu as $i=>$value) {
+        //echo $value["label"];
+        //echo "Key: $i; Value: $value['label']<br />\n";
+            echo "<li><a href=" . $value['url'][0] . ">" . $value["label"] . "</a></li>";
+             }
+    ?>
 </ul>
 
 </div><!-- sidebar -->

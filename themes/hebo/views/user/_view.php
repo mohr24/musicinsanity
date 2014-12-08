@@ -5,6 +5,15 @@
 
 <div class="view">
 
+<div class="lbox">
+<h2><span class="yellow"><?php echo $data['uname'] ?></span></h2>
+<div class="thumb">
+<img src="<?php echo Yii::app()->theme->baseUrl;?>/img/music/user.png" alt="user image" />
+</div>
+
+<p></p>
+</div>
+
 	<b><?php echo CHtml::encode($data->getAttributeLabel('uid')); ?>:</b>
 	<?php echo CHtml::link(CHtml::encode($data->uid), array('view', 'id'=>$data->uid)); ?>
 	<br />
