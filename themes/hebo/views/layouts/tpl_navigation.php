@@ -31,6 +31,12 @@
 							array('label'=>'Popular Users', 'url'=>array('/user/index')),
                         )),
 
+                        array('label'=>'Concerts <span class="caret"></span>', 'url'=>array('/site/page', 'view'=>'columns'),'itemOptions'=>array('class'=>'dropdown','tabindex'=>"-1"),'linkOptions'=>array('class'=>'dropdown-toggle','data-toggle'=>"dropdown","data-description"=>"Browse Concerts"),
+                        'items'=>array(
+                            array('label'=>'Future Concerts', 'url'=>array('/concerts/index')),
+                            array('label'=>'Past Concerts', 'url'=>array('/concerts/index')),
+                        )),
+                                   
                         array('label'=>'Search', 'url'=>array('/site/search'),'linkOptions'=>array("data-description"=>"search what you want"),),
                        
                         array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),

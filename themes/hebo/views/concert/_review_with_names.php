@@ -14,10 +14,6 @@
     }
 ?></h2>
 
-<button class="btn" type="button" onclick="location.href='/musicinsanity/index.php/concert/attend?id=<?php echo $data[\'cid\']>&returl=home'">Attend</button>
-
-<button class="btn" type="button" onclick="location.href='/musicinsanity/index.php/concert/attend?id=<?php echo $data[\'cid\']>&returl=home'">Add To List</button>
-
 <div class="post_info">On   <b> <?php echo CHtml::encode($data['cdate']); ?></b>    By    <?php if($data['aid'] != null){ echo CHtml::link(CHtml::encode($data['aname']), array('//artist/view', 'id'=>$data['aid']));} else {echo CHtml::encode($data['aname']);} ?></div>
 </div>
 
@@ -25,12 +21,13 @@
 
 <img src="<?php echo Yii::app()->theme->baseUrl;?>/img/music/concert.jpg" alt="image" />
 
-<p align="justify"><b><?php echo CHtml::encode('At'); ?>:</b>
-<?php echo CHtml::encode($data['vname']); ?>    <b><?php echo CHtml::encode('In'); ?></b>
+<p align="justify"><b><?php echo CHtml::encode('Venue'); ?>:</b>
+<?php echo CHtml::encode($data['vname']); ?>
+<br /> <b><?php echo CHtml::encode('City'); ?>:</b>
 <?php echo CHtml::encode($data['city']); ?>
 <br />
 <?php if($data['clink'] != null){
-    echo '<b>'.CHtml::encode("Buy Tick Here").': </b>'.
+    echo '<b>'.CHtml::encode("Buy Tick At").': </b>'.
     CHtml::link(CHtml::encode($data['clink']), CHtml::encode($data['clink'])).
     '<br/>';
 }?>

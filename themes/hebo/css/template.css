@@ -653,3 +653,44 @@ dd {
 form .row{
 	margin-left:0px;
 }
+
+.post_box {
+    padding-bottom: 30px;
+    border-bottom: 1px dotted #616d22;
+    margin-bottom: 30px;
+}
+
+.post_box img {
+    margin-bottom: 20px;
+}
+
+.post_title {
+    float: left;
+    width: 430px;
+    margin-bottom: 20px;
+}
+
+
+.post_box h2 a {
+    line-height: 24px;
+    color: #22260a;
+    font-weight: bold;
+    font-size: 26px;
+    text-decoration: none;
+}
+
+
+.post_info {
+    margin: 0px;
+    padding: 0px;
+    color: #22260a;
+    font-size: 12px;
+}
+
+.post_info a {
+    font-weight: bold;
+    color: #22260a;
+}
+
+
+.cleaner { clear: both; width: 100%; height: 0px; font-size: 0px;  }
