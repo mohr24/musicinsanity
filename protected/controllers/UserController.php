@@ -115,9 +115,9 @@ class UserController extends Controller
         foreach($pastconcertinfo as $i=>$concert){
             $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$concert['cid']));
             if(isset($userConcert->review)|| isset($userConcert->rate)){
-                $upcomingConcerts[$i]['reviewed']="Yes";
+                $pastconcertinfo[$i]['reviewed']="Yes";
             }else{
-                $upcomingConcerts[$i]['reviewed']="No";
+                $pastconcertinfo[$i]['reviewed']="No";
             }
         }
         $dataProviderPastConcerts=new CArrayDataProvider($pastconcertinfo, array(

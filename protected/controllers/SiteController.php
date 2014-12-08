@@ -71,9 +71,9 @@ class SiteController extends Controller
             foreach($recentReviews as $i=>$concert){
                 $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>$user_id,':cid'=>$concert['cid']));
                 if(isset($userConcert->review)|| isset($userConcert->rate)){
-                    $upcomingConcerts[$i]['reviewed']="Yes";
+                    $recentReviews[$i]['reviewed']="Yes";
                 }else{
-                    $upcomingConcerts[$i]['reviewed']="No";
+                    $recentReviews[$i]['reviewed']="No";
                 }
             }
             $dataProviderReviews = new CArrayDataProvider($recentReviews, array(
