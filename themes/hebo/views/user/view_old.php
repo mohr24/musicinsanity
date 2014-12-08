@@ -6,7 +6,7 @@ $this->breadcrumbs=array(
 	'Users'=>array('index'),
 	$model->uid,
 );
-$this->recommendations = $recommendations;
+
 $this->menu=array(
 	array('label'=>'List User', 'url'=>array('index')),
 	array('label'=>'Create User', 'url'=>array('create')),
@@ -81,46 +81,14 @@ $this->menu=array(
 )); ?>
 <br/>
 <h1>Concerts this user plans to attend</h1>
-<?php $this->widget('zii.widgets.CListView',array(
+<?php $this->widget('zii.widgets.grid.CGridView',array(
 
-    'dataProvider'=>$dataProviderFutureConcerts,
-   /* 'columns'=>array( // this array should include the attributes you want to display
+    'dataProvider'=>$dataProviderConcerts,
+    'columns'=>array( // this array should include the attributes you want to display
+        'cid',
         'aname',
         'cdate',
         'vname',
-    ),*/
-    'itemView'=>'//concert/_view_with_names',
-
-)); ?>
-    <h1>Recently Attended Concerts</h1>
-<?php $this->widget('zii.widgets.CListView',array(
-
-    'dataProvider'=>$dataProviderPastConcerts,
-    /* 'columns'=>array( // this array should include the attributes you want to display
-         'aname',
-         'cdate',
-         'vname',
-     ),*/
-    'itemView'=>'//concert/_view_with_names_and_ratings',
-
-)); ?>
-    <br/>
-    <h1>Recommended concerts from this users followers</h1>
-<?php $this->widget('zii.widgets.grid.CGridView',array(
-
-    'dataProvider'=>$dataProviderRecommendations,
-    'columns'=>array( // this array should include the attributes you want to display
-        'aname',
-        'rdate',
-        'vname',
     ),
-
-)); ?>
-    <br/>
-    <h1>User's Lists</h1>
-<?php $this->widget('zii.widgets.CListView',array(
-
-    'dataProvider'=>$dataProviderLists,
-    'itemView'=>'//list/_view',
 
 )); ?>

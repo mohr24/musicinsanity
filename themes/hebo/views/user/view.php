@@ -52,33 +52,10 @@ if(isset($editProfile)){
         'aname',
         'abio',
     ),*/
-    'itemView'=>'//artist/_view_short',
+    'itemView'=>'//artist/_view',
 
 )); ?>
 
-<?php $this->widget('zii.widgets.grid.CGridView',array(
-
-    'dataProvider'=>$dataProviderArtists,
-    'columns'=>array( // this array should include the attributes you want to display
-        'aname',
-        'abio',
-    ),
-
-
-)); ?>
-<table width = 500>
-    <tr>
-        <th> Artist Name</th>
-        <th> Bio</th>
-    </tr>
-
-    <?php foreach ($model->artists as $artist): ?>
-        <tr>
-            <td><?= CHtml::encode("{$artist->aname}") ?></td>
-            <td><?= CHtml::encode("{$artist->abio}") ?></td>
-        </tr>
-    <?php endforeach; ?>
-</table>
 <br/>
 <h1>Users this user is following</h1>
 <?php $this->widget('zii.widgets.CListView',array(
@@ -88,7 +65,7 @@ if(isset($editProfile)){
         'aname',
         'abio',
     ),*/
-    'itemView'=>'_view_short',
+    'itemView'=>'_view',
 
 )); ?>
 <br/>
