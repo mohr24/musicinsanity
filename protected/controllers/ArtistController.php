@@ -57,10 +57,9 @@ class ArtistController extends Controller
         ));
         $futureconcertinfo = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
-            ->select('c.cid,c.cdate, v.vname, v.city')
+            ->select('c.cid,c.cdate, v.vname, v.city, a.aid, a.aname, c.clink, c.cdescription')
             ->from('concert c, artist a, venue v')
-            ->where('a.aid = :aid and c.aid = a.aid and c.vid = v.vid and
-            (c.cdate between CURRENT_DATE() and (CURRENT_DATE() + interval 30 day))',
+            ->where('a.aid = :aid and c.aid = a.aid and c.vid = v.vid and (c.cdate between CURRENT_DATE() and (CURRENT_DATE() + interval 30 day))',
                 array(':aid'=>$artistModel->aid ))
             ->queryAll();
         $dataProviderUpcomingConcerts =new CArrayDataProvider($futureconcertinfo, array(

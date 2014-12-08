@@ -1,43 +1,55 @@
 <?php
-/* @var $this ArtistController */
-/* @var $data Artist */
-?>
+    /* @var $this UserController */
+    /* @var $data */
+    ?>
 
 <div class="view">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('aid')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->aid), array('view', 'id'=>$data->aid)); ?>
-	<br />
+<div class="lbox">
+<h2><span class="yellow">
+<?php echo "Featured Artist: "; ?></span>
+<?php echo CHtml::link(CHtml::encode($data->aname), array('view', 'id'=>$data->aid)); ?><?php
+    if(isset($data['fan'])){
+        if(strcmp($data['fan'], "No")){
+            echo CHtml::button('Become Fan', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('fan',array('id'=>$data['aid']))));
+        }
+        else{
+            echo CHtml::button('Not A Fan', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('unfan',array('id'=>$data['aid']))));
+        }
+    }?></h2>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('ausername')); ?>:</b>
-	<?php echo CHtml::encode($data->ausername); ?>
-	<br />
+<div class="thumb">
+<img src="<?php echo Yii::app()->theme->baseUrl;?>/img/music/artist.png" alt="user image" />
+</div>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('apassword')); ?>:</b>
-	<?php echo CHtml::encode($data->apassword); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('aname')); ?>:</b>
-	<?php echo CHtml::encode($data->aname); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('aemail')); ?>:</b>
-	<?php echo CHtml::encode($data->aemail); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('alink')); ?>:</b>
-	<?php echo CHtml::encode($data->alink); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('abio')); ?>:</b>
-	<?php echo CHtml::encode($data->abio); ?>
-	<br />
-
-	<?php /*
-	<b><?php echo CHtml::encode($data->getAttributeLabel('last_login_tp')); ?>:</b>
-	<?php echo CHtml::encode($data->last_login_tp); ?>
-	<br />
-
-	*/ ?>
-
+<p>
+<b><?php echo CHtml::encode("Contact"); ?>:</b>
+<?php echo CHtml::encode($data->aemail); ?>
+<br/>
+<b><?php echo CHtml::encode("About"); ?>:</b>
+<?php echo CHtml::encode($data->abio); ?>
+<br/>
+<b><?php echo CHtml::encode($data->aname); ?> Music Types: </b>
+<div id=<?php echo $data->aid; ?>>
+<ul class="nav nav-list">
+<?php
+    if(isset($data->musictypes)){
+        foreach ($data->musictypes as $i=>$value) {
+            //echo $value["label"];
+            //echo "Key: $i; Value: $value['label']<br />\n";
+            if($i < 3){
+            //echo "<li><a href=/musicinsanity/index.php/concert/" . $value['cid'] . ">" . $value['cdate'] . "</a></li>";
+              echo "<li>" . $value . "</li>";
+            }
+        }
+    }
+    ?>
+</ul>
+</div>
+</p>
+</div>
+<b><?php echo CHtml::encode("Band Website: "); ?>:</b>
+<?php echo CHtml::encode($data->alink); ?>
+<br />
+<br/>
 </div>

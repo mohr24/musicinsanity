@@ -6,6 +6,7 @@ $this->breadcrumbs=array(
         'Users'=>array('index'),
         $model->uid,
     );
+    echo $test;
 if($is_user){
     $editProfile = array('label'=>'Edit your Profile', 'url'=>array('update?id='.$model->uid));
 }
