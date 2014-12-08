@@ -16,7 +16,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>View ListModel #<?php echo $model->lid; ?></h1>
+<h1> <?php echo $model->lname; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
@@ -26,5 +26,17 @@ $this->menu=array(
 		'uid',
 	),
 )); ?>
+<br/>
+<h1>Concerts in this List:</h1>
+<?php $this->widget('zii.widgets.CListView',array(
 
+    'dataProvider'=>$dataProviderConcerts,
+    /* 'columns'=>array( // this array should include the attributes you want to display
+         'aname',
+         'cdate',
+         'vname',
+     ),*/
+    'itemView'=>'//concert/_view_with_names',
+
+)); ?>
 <a href="<?php echo Yii::app()->getBaseUrl(true);?>/concert/index">Add concerts to this list</a>

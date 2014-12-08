@@ -33,7 +33,7 @@ class SiteController extends Controller
             $this->layout = '//layouts/column2';
             $upcomingConcerts = Yii::app()->db->createCommand()
                 // ->select('co.course_name, cl.section_id')
-                ->select('c.cid,c.cdate,c.clink,c.cdescription,a.aname, a.aid,v.vname, v.city')
+                ->select('c.*,a.aname, a.aid,v.vname, v.city')
                 ->from('concert c, artist a, venue v, user_artist ua')
                 ->where('ua.uid = :uid and ua.aid = a.aid and c.aid = a.aid and c.vid = v.vid and
               (c.cdate between CURRENT_DATE() and (CURRENT_DATE() + interval 14 day)) ',
@@ -62,12 +62,20 @@ class SiteController extends Controller
             ));
             $recentReviews = Yii::app()->db->createCommand()
                 // ->select('co.course_name, cl.section_id')
-                ->select('c.cid,c.cdate,c.clink,c.cdescription,a.aname, a.aid,v.vname, v.city, u2.uid,u2.uname, uc.review, uc.rate')
+                ->select('c.*,a.aname, a.aid,v.vname, v.city, u2.uid,u2.uname, uc.review, uc.rate')
                 ->from('concert c, artist a, venue v, user_concert uc, user_follow uf, user u2')
                 ->where('uf.uid = :uid and uf.fuid = u2.uid and u2.uid = uc.uid and uc.cid = c.cid and c.aid = a.aid and c.vid = v.vid and
               (c.cdate between (CURRENT_DATE() - interval 14 day) and CURRENT_DATE()) ',
                     array(':uid'=>$user_id,))
                 ->queryAll();
+            foreach($recentReviews as $i=>$concert){
+                $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>$user_id,':cid'=>$concert['cid']));
+                if(isset($userConcert->review)|| isset($userConcert->rate)){
+                    $upcomingConcerts[$i]['reviewed']="Yes";
+                }else{
+                    $upcomingConcerts[$i]['reviewed']="No";
+                }
+            }
             $dataProviderReviews = new CArrayDataProvider($recentReviews, array(
                 'keyField'=>'cid',
 

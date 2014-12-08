@@ -79,11 +79,19 @@ class UserController extends Controller
 
         $futureconcertinfo = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
-            ->select('c.cid,c.cdate,c.clink,c.cdescription, a.aid ,a.aname,v.vname, v.city')
+            ->select('c.*, a.aid ,a.aname,v.vname, v.city')
             ->from('concert c, artist a, venue v, user_concert uc')
             ->where('uc.uid = :uid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid and c.cdate>CURRENT_DATE()',
                 array(':uid'=>$userModel->uid ))
             ->queryAll();
+        foreach($futureconcertinfo as $i=>$concert){
+            $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$concert['cid']));
+            if($userConcert){
+                $upcomingConcerts[$i]['attending']="Yes";
+            }else{
+                $upcomingConcerts[$i]['attending']="No";
+            }
+        }
         $dataProviderFutureConcerts=new CArrayDataProvider($futureconcertinfo, array(
             'keyField'=>'cid',
             //   'id'=>'cid',
@@ -98,12 +106,20 @@ class UserController extends Controller
         ));
         $pastconcertinfo = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
-            ->select('c.cid,c.cdate,c.clink,c.cdescription, a.aid ,a.aname,v.vname, v.city, uc.rate, uc.review')
+            ->select('c.*, a.aid ,a.aname,v.vname, v.city, uc.rate, uc.review')
             ->from('concert c, artist a, venue v, user_concert uc')
             ->where('uc.uid = :uid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid and
             (c.cdate between (CURRENT_DATE() - interval 30 day) and CURRENT_DATE())',
                 array(':uid'=>$userModel->uid ))
             ->queryAll();
+        foreach($pastconcertinfo as $i=>$concert){
+            $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$concert['cid']));
+            if(isset($userConcert->review)|| isset($userConcert->rate)){
+                $upcomingConcerts[$i]['reviewed']="Yes";
+            }else{
+                $upcomingConcerts[$i]['reviewed']="No";
+            }
+        }
         $dataProviderPastConcerts=new CArrayDataProvider($pastconcertinfo, array(
             'keyField'=>'cid',
             //   'id'=>'cid',
@@ -118,7 +134,7 @@ class UserController extends Controller
         ));
         $recommendations = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
-            ->select('c.cid,c.cdate,a.aname, a.aid, c.clink, c.cdescription, v.vname')
+            ->select('c.*,a.aname, a.aid, v.vname')
             ->from('concert c, list l,concert_list cl, user_follow uf, artist a, venue v, user u2')
             ->where('uf.uid = :uid and uf.fuid = l.uid and l.uid = u2.uid and l.lid = cl.lid and cl.cid = c.cid and
                  c.aid = a.aid and c.vid = v.vid',

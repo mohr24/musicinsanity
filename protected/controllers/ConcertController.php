@@ -134,9 +134,10 @@ class ConcertController extends Controller
 	 */
 	public function actionIndex()
 	{
+        $user_id = Yii::app()->user->getId();
         $upcomingConcerts = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
-            ->select('c.cid,c.cdate,c.clink,c.cdescription,a.aname, a.aid,v.vname, v.city')
+            ->select('c.*,a.aname, a.aid,v.vname, v.city')
             ->from('concert c, artist a, venue v, user_artist ua')
             ->where('ua.uid = :uid and ua.aid = a.aid and c.aid = a.aid and c.vid = v.vid and
               (c.cdate between CURRENT_DATE() and (CURRENT_DATE() + interval 14 day)) ',
@@ -163,9 +164,9 @@ class ConcertController extends Controller
                  'pageSize'=>10,
              ),*/
         ));
-		$dataProvider=new CActiveDataProvider('Concert');
+
 		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+			'dataProviderConcerts'=>$dataProviderConcerts,
 		));
 	}
 

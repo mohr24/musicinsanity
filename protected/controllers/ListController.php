@@ -27,12 +27,12 @@ class ListController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
+			/*array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
 				'users'=>array('*'),
-			),
+			),*/
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update','index','view', 'add'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -51,8 +51,31 @@ class ListController extends Controller
 	 */
 	public function actionView($id)
 	{
+        $concertinfo = Yii::app()->db->createCommand()
+            ->select('c.cid,c.cdate,c.clink,c.cdescription, a.aid ,a.aname,v.vname, v.city')
+            ->from('concert c, artist a, venue v, concert_list cl')
+            ->where('cl.lid = :lid and cl.cid = c.cid and c.aid = a.aid and c.vid = v.vid',
+                array(':lid'=>$id ))
+            ->queryAll();
+        foreach($concertinfo as $i=>$concert){
+            $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$concert['cid']));
+            if($userConcert){
+                $concertinfo[$i]['attending']="Yes";
+            }else{
+                $concertinfo[$i]['attending']="No";
+            }
+        }
+        $dataProviderConcerts=new CArrayDataProvider($concertinfo, array(
+            'keyField'=>'cid',
+            //   'id'=>'cid',
+
+            'pagination'=>array(
+                'pageSize'=>10,
+            ),
+        ));
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
+            'dataProviderConcerts'=>$dataProviderConcerts,
 		));
 	}
 
@@ -152,8 +175,36 @@ class ListController extends Controller
 	 * @return ListModel the loaded model
 	 * @throws CHttpException
 	 */
-    public function addConcert($cid){
+    public function actionAdd($cid,$return){
+        // Uncomment the following line if AJAX validation is needed
+        // $this->performAjaxValidation($model);
+        $concertList= new ConcertList();
+        $lists = ListModel::model()->findAll('uid = :uid',array(':uid'=>Yii::app()->user->getId()));
+        if(isset($_POST['ConcertList']))
+        {
+            $concertList->attributes=$_POST['ConcertList'];
+            $concertList->cid=$cid;
+            if(ConcertList::model()->exists('lid = :lid and cid = :cid',array(':lid'=>$concertList->lid,':cid'=>$concertList->cid))){
+                if($return == "home") {
+                    $this->redirect(array('site/index'));
+                }else if($return == "page"){
+                    $this->actionView($concertList->lid);
+                }
+            }else if($concertList->save()){
+                if($return == "home") {
+                    $this->redirect(array('site/index'));
+                }else if($return == "page"){
+                    $this->actionView($concertList->lid);
+                }
+            }else{
+                print_r($concertList->getErrors());
+            }
+        }
 
+        $this->render('choose_list',array(
+            'concertList'=>$concertList,
+            'lists'=>$lists,
+        ));
     }
 	public function loadModel($id)
 	{

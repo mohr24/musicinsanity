@@ -51,28 +51,45 @@ class ArtistController extends Controller
 	 */
 	public function actionView($id)
 	{
+        $user_id = Yii::app()->user->getId();
         $artistModel=$this->loadModel($id);
         $dataProviderMusicType =new CArrayDataProvider($artistModel->musictypes, array(
             'keyField'=>'type_name',
         ));
         $futureconcertinfo = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
-            ->select('c.cid,c.cdate, v.vname, v.city, a.aid, a.aname, c.clink, c.cdescription')
+            ->select('c.*, v.vname, v.city, a.aid, a.aname')
             ->from('concert c, artist a, venue v')
             ->where('a.aid = :aid and c.aid = a.aid and c.vid = v.vid and (c.cdate between CURRENT_DATE() and (CURRENT_DATE() + interval 30 day))',
                 array(':aid'=>$artistModel->aid ))
             ->queryAll();
+        foreach($futureconcertinfo as $i=>$concert){
+            $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>$user_id,':cid'=>$concert['cid']));
+            if($userConcert){
+                $futureconcertinfo[$i]['attending']="Yes";
+            }else{
+                $futureconcertinfo[$i]['attending']="No";
+            }
+        }
         $dataProviderUpcomingConcerts =new CArrayDataProvider($futureconcertinfo, array(
             'keyField'=>'cid',
         ));
         $reviews = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
-            ->select('u.uid, u.uname, uc.rate, uc.review, c.cid, c.cdate, v.vname, v.city, c.clink, c.cdescription')
+            ->select('u.uid, u.uname, uc.rate, uc.review, c.*, v.vname, v.city')
             ->from('concert c, artist a, venue v, user_concert uc, user u')
             ->where('a.aid = :aid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid and u.uid = uc.uid and
             (c.cdate between (CURRENT_DATE() - interval 30 day) and CURRENT_DATE())',
                 array(':aid'=>$artistModel->aid ))
             ->queryAll();
+        foreach($reviews as $i=>$concert){
+            $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>$user_id,':cid'=>$concert['cid']));
+            if(isset($userConcert->review)|| isset($userConcert->rate)){
+                $reviews[$i]['reviewed']="Yes";
+            }else{
+                $reviews[$i]['reviewed']="No";
+            }
+        }
         $dataProviderRecentReviews=new CArrayDataProvider($reviews, array(
             'keyField'=>'cid',
         ));
