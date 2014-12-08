@@ -161,7 +161,7 @@ class ConcertController extends Controller
         $userConcert->cid = $id;
         if($userConcert->save()){
             if($return == "home") {
-                $this->redirect('//site/index');
+                $this->redirect(array('site/index'));
             }else if($return == "page"){
                 $this->actionView($id);
             }
@@ -177,7 +177,7 @@ class ConcertController extends Controller
         $userConcert = UserConcert::model()->find('uid = :uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$id));
         if($userConcert->delete())
             if($return == "home") {
-                $this->redirect('//site/index');
+                $this->redirect(array('site/index'));
             }else if($return == "page"){
                 $this->actionView($id);
             }
