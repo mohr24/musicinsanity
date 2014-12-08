@@ -28,7 +28,7 @@
 <b><?php echo CHtml::encode("Contact"); ?>:</b>
 <?php echo CHtml::encode($data->uemail); ?>
 <br/>
-<b><?php echo CHtml::encode($data->uname); ?> Lists: </b>
+<b><?php echo CHtml::encode($data->uname); ?> Music Types: </b>
 <div id=<?php echo $data->uid; ?>>
 <ul class="nav nav-list">
 <?php
