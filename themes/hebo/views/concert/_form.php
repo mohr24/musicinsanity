@@ -20,12 +20,6 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'aid'); ?>
-		<?php echo $form->textField($model,'aid'); ?>
-		<?php echo $form->error($model,'aid'); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->labelEx($model,'cdate'); ?>
 		<?php echo $form->textField($model,'cdate'); ?>
 		<?php echo $form->error($model,'cdate'); ?>
@@ -59,12 +53,6 @@
 		<?php echo $form->labelEx($model,'cdescription'); ?>
 		<?php echo $form->textField($model,'cdescription',array('size'=>40,'maxlength'=>40)); ?>
 		<?php echo $form->error($model,'cdescription'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'concert_tp'); ?>
-		<?php echo $form->textField($model,'concert_tp'); ?>
-		<?php echo $form->error($model,'concert_tp'); ?>
 	</div>
 
 	<div class="row buttons">

@@ -26,3 +26,5 @@ $this->menu=array(
 		'uid',
 	),
 )); ?>
+
+<a href="<?php echo Yii::app()->getBaseUrl(true);?>/concert/index">Add concerts to this list</a>

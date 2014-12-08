@@ -60,7 +60,8 @@ class ListController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate()
+
+	public function actionCreate($uid)
 	{
 		$model=new ListModel;
 
@@ -70,6 +71,7 @@ class ListController extends Controller
 		if(isset($_POST['ListModel']))
 		{
 			$model->attributes=$_POST['ListModel'];
+            $model->uid=$uid;
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->lid));
 		}
@@ -150,6 +152,9 @@ class ListController extends Controller
 	 * @return ListModel the loaded model
 	 * @throws CHttpException
 	 */
+    public function addConcert($cid){
+
+    }
 	public function loadModel($id)
 	{
 		$model=ListModel::model()->findByPk($id);
