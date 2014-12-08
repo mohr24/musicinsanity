@@ -79,7 +79,7 @@ class UserController extends Controller
 
         $futureconcertinfo = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
-            ->select('c.cid,c.cdate, a.aid ,a.aname,v.vname, v.city')
+            ->select('c.cid,c.cdate,c.clink,c.cdescription, a.aid ,a.aname,v.vname, v.city')
             ->from('concert c, artist a, venue v, user_concert uc')
             ->where('uc.uid = :uid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid and c.cdate>CURRENT_DATE()',
                 array(':uid'=>$userModel->uid ))
@@ -98,7 +98,7 @@ class UserController extends Controller
         ));
         $pastconcertinfo = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
-            ->select('c.cid,c.cdate, a.aid ,a.aname,v.vname, v.city, uc.rate, uc.review')
+            ->select('c.cid,c.cdate,c.clink,c.cdescription, a.aid ,a.aname,v.vname, v.city, uc.rate, uc.review')
             ->from('concert c, artist a, venue v, user_concert uc')
             ->where('uc.uid = :uid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid and
             (c.cdate between (CURRENT_DATE() - interval 30 day) and CURRENT_DATE())',
@@ -116,15 +116,15 @@ class UserController extends Controller
                 'pageSize'=>10,
             ),
         ));
-     /*   $recommendations = Yii::app()->db->createCommand()
+        $recommendations = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
-            ->select('r.rid,r.rdate,a.aname,v.vname')
-            ->from('recommendation r, list l, user_follow uf, artist a, venue v')
-            ->where('uf.uid = :uid and uf.fuid = l.uid and r.lid = l.lid and
-                 r.aid = a.aid and r.vid = v.vid',
+            ->select('c.cid,c.cdate,a.aname, a.aid, c.clink, c.cdescription, v.vname')
+            ->from('concert c, list l,concert_list cl, user_follow uf, artist a, venue v, user u2')
+            ->where('uf.uid = :uid and uf.fuid = l.uid and l.uid = u2.uid and l.lid = cl.lid and cl.cid = c.cid and
+                 c.aid = a.aid and c.vid = v.vid',
                 array(':uid'=>$userModel->uid,))
             ->queryAll();
-        $dataProviderRecommendations=new CArrayDataProvider($recommendations, array(
+       /* $dataProviderRecommendations=new CArrayDataProvider($recommendations, array(
             'keyField'=>'rid',
             //   'id'=>'cid',
             /* 'sort'=>array(
@@ -146,6 +146,7 @@ class UserController extends Controller
         $follows = UserFollow::model()->exists('uid = :uid and fuid = :fuid',array(':uid'=>Yii::app()->user->getId(),':fuid'=>$userModel->uid));
 		$this->render('view',array(
 			'model'=>$userModel,
+            'recommendations'=>$recommendations,
             'dataProviderArtists'=>$dataProviderArtists,
             'dataProviderFollowing'=>$dataProviderFollowing,
             'dataProviderFutureConcerts'=>$dataProviderFutureConcerts,
@@ -167,7 +168,12 @@ class UserController extends Controller
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
+        $rock = Musictype::model()->findAll('major=Rock/Pop');
+        $jazz = Musictype::model()->findAll('major=Jazz/Blues');
+        $country = Musictype::model()->findAll('major=Country');
+        $hiphop = Musictype::model()->findAll('major=Hiphop');
 
+       // $musictypes = {'rock','jazz',}
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];

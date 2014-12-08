@@ -20,42 +20,46 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'uusername'); ?>
+		<?php echo $form->labelEx($model,'Username'); ?>
 		<?php echo $form->textField($model,'uusername',array('size'=>20,'maxlength'=>20)); ?>
 		<?php echo $form->error($model,'uusername'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'upassword'); ?>
+		<?php echo $form->labelEx($model,'Password'); ?>
 		<?php echo $form->textField($model,'upassword',array('size'=>10,'maxlength'=>10)); ?>
 		<?php echo $form->error($model,'upassword'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'uname'); ?>
+		<?php echo $form->labelEx($model,'Name'); ?>
 		<?php echo $form->textField($model,'uname',array('size'=>20,'maxlength'=>20)); ?>
 		<?php echo $form->error($model,'uname'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'uemail'); ?>
+		<?php echo $form->labelEx($model,'Email'); ?>
 		<?php echo $form->textField($model,'uemail',array('size'=>30,'maxlength'=>30)); ?>
 		<?php echo $form->error($model,'uemail'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'birthday'); ?>
+		<?php echo $form->labelEx($model,'Birthday'); ?>
 		<?php echo $form->textField($model,'birthday'); ?>
 		<?php echo $form->error($model,'birthday'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'city_residence'); ?>
+		<?php echo $form->labelEx($model,'City of Residence'); ?>
 		<?php echo $form->textField($model,'city_residence',array('size'=>20,'maxlength'=>20)); ?>
 		<?php echo $form->error($model,'city_residence'); ?>
 	</div>
 
-
+    <div class="row">
+        <?php echo $form->labelEx($model,'City of Residence'); ?>
+        <?php echo $form->textField($model,'city_residence',array('size'=>20,'maxlength'=>20)); ?>
+        <?php echo $form->error($model,'city_residence'); ?>
+    </div>
 
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>

@@ -71,7 +71,7 @@ class ConcertController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate()
+	public function actionCreate($aid)
 	{
 		$model=new Concert;
 
@@ -81,6 +81,7 @@ class ConcertController extends Controller
 		if(isset($_POST['Concert']))
 		{
 			$model->attributes=$_POST['Concert'];
+            $model->aid=$aid;
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->cid));
 		}
@@ -133,6 +134,35 @@ class ConcertController extends Controller
 	 */
 	public function actionIndex()
 	{
+        $upcomingConcerts = Yii::app()->db->createCommand()
+            // ->select('co.course_name, cl.section_id')
+            ->select('c.cid,c.cdate,c.clink,c.cdescription,a.aname, a.aid,v.vname, v.city')
+            ->from('concert c, artist a, venue v, user_artist ua')
+            ->where('ua.uid = :uid and ua.aid = a.aid and c.aid = a.aid and c.vid = v.vid and
+              (c.cdate between CURRENT_DATE() and (CURRENT_DATE() + interval 14 day)) ',
+                array(':uid'=>$user_id,))
+            ->queryAll();
+        //add attending column
+        foreach($upcomingConcerts as $i=>$concert){
+            $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>$user_id,':cid'=>$concert['cid']));
+            if($userConcert){
+                $upcomingConcerts[$i]['attending']="Yes";
+            }else{
+                $upcomingConcerts[$i]['attending']="No";
+            }
+        }
+        $dataProviderConcerts=new CArrayDataProvider($upcomingConcerts, array(
+            'keyField'=>'cid',
+            //   'id'=>'cid',
+            /* 'sort'=>array(
+                 'attributes'=>array(
+                     'id', 'username', 'email',
+                 ),
+             ),
+             'pagination'=>array(
+                 'pageSize'=>10,
+             ),*/
+        ));
 		$dataProvider=new CActiveDataProvider('Concert');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,

@@ -17,9 +17,16 @@
     foreach ($this->menu as $i=>$value) {
         //echo $value["label"];
         //echo "Key: $i; Value: $value['label']<br />\n";
-            echo "<li><a href=" . $value['url'][0] . ">" . $value["label"] . "</a></li>";
-             }
+      echo "<li><a href=" . $value['url'][0] . ">" . $value["label"] . "</a></li>";
+    }
+    if(isset(Yii::app()->user->artist) and Yii::app()->user->artist){
+        echo "<li><a href=".Yii::app()->getBaseUrl(true) . "/index.php/concert/create?aid=". Yii::app()->user->aid . ">Create a concert</a></li>";
+    }else{
+        echo "<li><a href=".Yii::app()->getBaseUrl(true) . "/index.php/list/create?uid=". Yii::app()->user->getId() . ">Create a List</a></li>";
+
+    }
     ?>
+
 </ul>
 
 </div><!-- sidebar -->
