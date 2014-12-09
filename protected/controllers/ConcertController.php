@@ -132,43 +132,80 @@ class ConcertController extends Controller
 	/**
 	 * Lists all models.
 	 */
-	public function actionIndex()
+	public function actionIndex($future)
 	{
         $user_id = Yii::app()->user->getId();
-        $upcomingConcerts = Yii::app()->db->createCommand()
-            // ->select('co.course_name, cl.section_id')
-            ->select('c.*,a.aname, a.aid,v.vname, v.city')
-            ->from('concert c, artist a, venue v, user_artist ua')
-            ->where('ua.uid = :uid and ua.aid = a.aid and c.aid = a.aid and c.vid = v.vid and
-              (c.cdate between CURRENT_DATE() and (CURRENT_DATE() + interval 14 day)) ',
-                array(':uid'=>$user_id,))
-            ->queryAll();
-        //add attending column
-        foreach($upcomingConcerts as $i=>$concert){
-            $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>$user_id,':cid'=>$concert['cid']));
-            if($userConcert){
-                $upcomingConcerts[$i]['attending']="Yes";
-            }else{
-                $upcomingConcerts[$i]['attending']="No";
+        if(isset($future) && $future=="false"){
+            $pastConcerts = Yii::app()->db->createCommand()
+                // ->select('co.course_name, cl.section_id')
+                ->select('c.*,a.aname, a.aid,v.vname, v.city')
+                ->from('concert c, artist a, venue v, user_artist ua')
+                ->where('ua.uid = :uid and ua.aid = a.aid and c.aid = a.aid and c.vid = v.vid and
+              (c.cdate between (CURRENT_DATE() - interval 14 day) and CURRENT_DATE()) ',
+                    array(':uid'=>$user_id,))
+                ->queryAll();
+            //add attending column
+            foreach($pastConcerts as $i=>$concert){
+                $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$concert['cid']));
+                if(isset($userConcert->review)|| isset($userConcert->rate)){
+                    $pastConcerts[$i]['reviewed']="Yes";
+                }else{
+                    $pastConcerts[$i]['reviewed']="No";
+                }
             }
-        }
-        $dataProviderConcerts=new CArrayDataProvider($upcomingConcerts, array(
-            'keyField'=>'cid',
-            //   'id'=>'cid',
-            /* 'sort'=>array(
-                 'attributes'=>array(
-                     'id', 'username', 'email',
+            $dataProviderConcerts=new CArrayDataProvider($pastConcerts, array(
+                'keyField'=>'cid',
+                //   'id'=>'cid',
+                /* 'sort'=>array(
+                     'attributes'=>array(
+                         'id', 'username', 'email',
+                     ),
                  ),
-             ),
-             'pagination'=>array(
-                 'pageSize'=>10,
-             ),*/
-        ));
+                 'pagination'=>array(
+                     'pageSize'=>10,
+                 ),*/
+            ));
 
-		$this->render('index',array(
-			'dataProviderConcerts'=>$dataProviderConcerts,
-		));
-	}
+            $this->render('index',array(
+                'dataProviderConcerts'=>$dataProviderConcerts,
+            ));
+        }else{
+            $upcomingConcerts = Yii::app()->db->createCommand()
+                // ->select('co.course_name, cl.section_id')
+                ->select('c.*,a.aname, a.aid,v.vname, v.city')
+                ->from('concert c, artist a, venue v, user_artist ua')
+                ->where('ua.uid = :uid and ua.aid = a.aid and c.aid = a.aid and c.vid = v.vid and
+              (c.cdate between CURRENT_DATE() and (CURRENT_DATE() + interval 14 day)) ',
+                    array(':uid'=>$user_id,))
+                ->queryAll();
+            //add attending column
+            foreach($upcomingConcerts as $i=>$concert){
+                $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>$user_id,':cid'=>$concert['cid']));
+                if($userConcert){
+                    $upcomingConcerts[$i]['attending']="Yes";
+                }else{
+                    $upcomingConcerts[$i]['attending']="No";
+                }
+            }
+            $dataProviderConcerts=new CArrayDataProvider($upcomingConcerts, array(
+                'keyField'=>'cid',
+                //   'id'=>'cid',
+                /* 'sort'=>array(
+                     'attributes'=>array(
+                         'id', 'username', 'email',
+                     ),
+                 ),
+                 'pagination'=>array(
+                     'pageSize'=>10,
+                 ),*/
+            ));
+
+            $this->render('index',array(
+                'dataProviderConcerts'=>$dataProviderConcerts,
+            ));
+        }
+    }
+
 
 	/**
 	 * Manages all models.

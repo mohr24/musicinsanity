@@ -52,5 +52,9 @@ $this->breadcrumbs=array(
 
     <h3 class="text-error">Or create a new account:</h3>
 
-    <button class="btn btn-large btn-danger" type="button"onclick="location.href = '/musicinsanity/index.php/user/create'">SIGN UP</button>
+    <button class="btn btn-large btn-danger" type="button"onclick="location.href = '/musicinsanity/index.php/user/create'">SIGN UP AS USER</button>
+</div>
+<div class="span3" style="text-align:center;">
+
+    <button class="btn btn-large btn-danger" type="button"onclick="location.href = '/musicinsanity/index.php/user/createArtist'">SIGN UP AS ARTIST</button>
 </div>

@@ -28,7 +28,7 @@ class UserController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('create'),
+				'actions'=>array('create','createArtist'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -184,10 +184,6 @@ class UserController extends Controller
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-        $rock = Musictype::model()->findAll('major=Rock/Pop');
-        $jazz = Musictype::model()->findAll('major=Jazz/Blues');
-        $country = Musictype::model()->findAll('major=Country');
-        $hiphop = Musictype::model()->findAll('major=Hiphop');
 
        // $musictypes = {'rock','jazz',}
 		if(isset($_POST['User']))
@@ -203,6 +199,46 @@ class UserController extends Controller
 			'model'=>$model,
 		));
 	}
+
+    public function actionCreateArtist()
+    {
+        $usermodel=new User;
+        $artistmodel = new Artist;
+
+        // Uncomment the following line if AJAX validation is needed
+        // $this->performAjaxValidation($model);
+
+        // $musictypes = {'rock','jazz',}
+        if(isset($_POST['User']) && isset($_POST['Artist']) )
+        {
+            $usermodel->attributes=$_POST['User'];
+            $artistmodel->attributes=$_POST['Artist'];
+            $usermodel->reputation=0;
+            $usermodel->last_login_tp= new CDbExpression('CURRENT_DATE()');
+            $usermodel->uname = $artistmodel->aname;
+            $usermodel->artist=1;
+            if($usermodel->save()){
+                $artistmodel->aid=$usermodel->uid;
+                $artistmodel->aemail=$usermodel->uemail;
+                $artistmodel->last_login_tp= new CDbExpression('CURRENT_DATE()');
+                if($artistmodel->save()){
+                    $this->redirect(array('//site/login'));
+                }
+                else{
+                    print_r($artistmodel->getErrors());
+                }
+            }
+            else{
+                print_r($usermodel->getErrors());
+            }
+
+        }
+
+        $this->render('create_artist',array(
+            'usermodel'=>$usermodel,
+            'artistmodel'=>$artistmodel,
+        ));
+    }
 
 	/**
 	 * Updates a particular model.

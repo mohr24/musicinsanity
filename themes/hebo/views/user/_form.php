@@ -55,12 +55,6 @@
 		<?php echo $form->error($model,'city_residence'); ?>
 	</div>
 
-    <div class="row">
-        <?php echo $form->labelEx($model,'City of Residence'); ?>
-        <?php echo $form->textField($model,'city_residence',array('size'=>20,'maxlength'=>20)); ?>
-        <?php echo $form->error($model,'city_residence'); ?>
-    </div>
-
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
 	</div>

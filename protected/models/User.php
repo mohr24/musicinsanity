@@ -13,10 +13,11 @@
  * @property string $city_residence
  * @property integer $reputation
  * @property string $last_login_tp
+ * @property integer $artist
+ * @property string $gender
  *
  * The followings are the available model relations:
  * @property List[] $lists
- * @property Recommendation[] $recommendations
  * @property Artist[] $artists
  * @property Concert[] $concerts
  * @property UserFollow[] $userFollows
@@ -41,15 +42,15 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('uusername, upassword, uname, uemail, reputation, last_login_tp', 'required'),
-			array('reputation', 'numerical', 'integerOnly'=>true),
+			array('uusername, upassword, uname, uemail, reputation', 'required'),
+			array('reputation, artist', 'numerical', 'integerOnly'=>true),
 			array('uusername, uname, city_residence', 'length', 'max'=>20),
-			array('upassword', 'length', 'max'=>10),
+			array('upassword, gender', 'length', 'max'=>10),
 			array('uemail', 'length', 'max'=>30),
-			array('birthday', 'safe'),
+			array('birthday, last_login_tp', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('uid, uusername, upassword, uname, uemail, birthday, city_residence, reputation, last_login_tp', 'safe', 'on'=>'search'),
+			array('uid, uusername, upassword, uname, uemail, birthday, city_residence, reputation, last_login_tp, artist, gender', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,12 +62,11 @@ class User extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'lists' => array(self::HAS_MANY, 'ListModel', 'uid'),
-			'recommendations' => array(self::MANY_MANY, 'Recommendation', 'sys_recom(uid, rid)'),
+			'lists' => array(self::HAS_MANY, 'List', 'uid'),
 			'artists' => array(self::MANY_MANY, 'Artist', 'user_artist(uid, aid)'),
 			'concerts' => array(self::MANY_MANY, 'Concert', 'user_concert(uid, cid)'),
-			//'userFollows' => array(self::HAS_MANY, 'UserFollow', 'uid'),
-			//'userFollows1' => array(self::HAS_MANY, 'UserFollow', 'fuid'),
+			'userFollows' => array(self::HAS_MANY, 'UserFollow', 'uid'),
+			'userFollows1' => array(self::HAS_MANY, 'UserFollow', 'fuid'),
 			'musictypes' => array(self::MANY_MANY, 'Musictype', 'user_musictype(uid, type_name)'),
             'usersFollowed' => array(self::MANY_MANY, 'User', 'user_follow(uid,fuid)'),
             'usersFollowing' => array(self::MANY_MANY, 'User', 'user_follow(fuid,uid)'),
@@ -88,6 +88,8 @@ class User extends CActiveRecord
 			'city_residence' => 'City Residence',
 			'reputation' => 'Reputation',
 			'last_login_tp' => 'Last Login Tp',
+			'artist' => 'Artist',
+			'gender' => 'Gender',
 		);
 	}
 
@@ -118,6 +120,8 @@ class User extends CActiveRecord
 		$criteria->compare('city_residence',$this->city_residence,true);
 		$criteria->compare('reputation',$this->reputation);
 		$criteria->compare('last_login_tp',$this->last_login_tp,true);
+		$criteria->compare('artist',$this->artist);
+		$criteria->compare('gender',$this->gender,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

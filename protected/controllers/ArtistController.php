@@ -76,7 +76,7 @@ class ArtistController extends Controller
         ));
         $reviews = Yii::app()->db->createCommand()
             // ->select('co.course_name, cl.section_id')
-            ->select('u.uid, u.uname, uc.rate, uc.review, c.*, v.vname, v.city')
+            ->select('u.uid, u.uname, uc.rate, uc.review, c.*, v.vname, v.city, a.aid, a.aname')
             ->from('concert c, artist a, venue v, user_concert uc, user u')
             ->where('a.aid = :aid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid and u.uid = uc.uid and
             (c.cdate between (CURRENT_DATE() - interval 30 day) and CURRENT_DATE())',
