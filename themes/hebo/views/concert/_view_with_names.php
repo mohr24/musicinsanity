@@ -20,7 +20,7 @@
 <?php
     //echo $data['cid'];
     if(isset($data['attending'])){
-    if(strcmp ( $data['attending'], "Yes" )){
+    if(strcmp ( $data['attending'], "No" )){
         echo CHtml::button('Unattend', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('concert/unattend',array('id'=>$data['cid'], 'return'=>"home"))));
     }
     else {

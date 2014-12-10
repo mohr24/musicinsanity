@@ -22,14 +22,12 @@
 <?php
     //echo $data['cid'];
     if(isset($data['reviewed'])){
-        if(strcmp ( $data['uname'], "No" )){
-            echo CHtml::button('Unattend', array ('class'=>'btn btn-primary','style' => "margin-top: 20px;", 'submit'=>$this->createUrl('concert/unattend',array('id'=>$data['cid'], 'return'=>"home"))));
+        if(strcmp ( $data['reviewed'], "No" )){
+            echo CHtml::button('Add My Review', array ('class'=>'btn btn-primary','style' => "margin-top: 20px;", 'submit'=>$this->createUrl('concert/review',array('id'=>$data['cid'], 'return'=>"home"))));
         }
         else {
-            echo CHtml::button('Attend', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('concert/attend',array('id'=>$data['cid'], 'return'=>"home"))));
         }
     }
-    echo CHtml::button('Add to List', array ('class'=>'btn btn-primary','style' => "margin-top: 20px; margin-left: 10px", 'submit'=>$this->createUrl('list/add',array('id'=>$data['cid'], 'return'=>"home"))));
     ?>
 
 <div class="cleaner"></div>

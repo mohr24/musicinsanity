@@ -81,7 +81,7 @@ if(isset($editProfile)){
     'itemView'=>'//concert/_view_with_names',
 
 )); ?>
-    <h1>Recently Attended Concerts</h1>
+<h1>Recently Attended Concerts</h1>
 <?php $this->widget('zii.widgets.CListView',array(
 
     'dataProvider'=>$dataProviderPastConcerts,
