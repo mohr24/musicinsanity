@@ -32,15 +32,27 @@ if(isset($editProfile)){
 
 <h1><?php if($model->uid == Yii::app()->user->id) {echo "Your";} else{echo $model->uname."'s";} ?> Profile</h1>
 
-<?php $this->widget('zii.widgets.CDetailView', array(
+<?php
+    $types = array();
+    foreach ($model->musictypes as $i => $value) {
+        $types[$i] = $value->type_name;
+             }
+    $reputation = "Junior";
+    if($model->reputation > 6){
+        $reputation = "Insane";
+    }
+    else {
+        $reputation = "Senior";
+    }
+
+    $this->widget('zii.widgets.CDetailView', array(
     'data'=>$model,
     'attributes'=>array(
-
-        'uemail',
-        'birthday',
-        'city_residence',
-        'reputation',
-
+        array ( 'label'=>'Contact', 'value'=>$model->uemail ),
+        array ( 'label'=>'Birthday', 'value'=>$model->birthday ),
+        array ( 'label'=>'From City', 'value'=>$model->city_residence ),
+        array ( 'label'=>'Reputation', 'value'=>$reputation),
+        array ( 'label'=>'Prefered Music Type', 'type'=>'text', 'value'=>implode(", ", $types)),
     ),
 ));?>
 <br/>

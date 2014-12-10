@@ -92,16 +92,17 @@ class MusictypeController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-    public function actionChooseArtist()
+    public function actionChooseArtist($aid)
     {
     }
-    public function actionChooseUser()
+    public function actionChooseUser($uid)
     {
     }
-    public function actionChooseConcert()
+    public function actionChooseConcert($cid)
     {
     }
-	public function actionCreate()
+    
+    public function actionCreate()
 	{
 		$model=new Musictype;
 

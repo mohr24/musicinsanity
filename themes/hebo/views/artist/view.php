@@ -30,13 +30,19 @@ if(Yii::app()->user->id != $model->aid){
 <h1><?php if($model->aid == Yii::app()->user->id) {echo "Your";} else{echo $model->aname."'s";} ?> Profile</h1>
 
 
-<?php $this->widget('zii.widgets.CDetailView', array(
+
+<?php
+    $types = array();
+    foreach ($model->musictypes as $i => $value) {
+        $types[$i] = $value->type_name;
+    }
+    $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
-
-		'aemail',
-		'alink',
-		'abio',
+        array ( 'label'=>'Contact', 'value'=>$model->aemail ),
+        array ( 'label'=>'Website', 'value'=>$model->alink ),
+        array ( 'label'=>'Band Bio', 'value'=>$model->abio ),
+        array ( 'label'=>'Playing Music Type', 'type'=>'text', 'value'=>implode(", ", $types)),
 		//'last_login_tp',
 	),
 )); ?>

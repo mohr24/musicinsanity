@@ -37,19 +37,28 @@ $this->menu=array(
 );*/
 ?>
 
-<h1>View Concert #<?php echo $model->cid; ?></h1>
+<h1><?php echo $model->cname; ?></h1>
 
-<?php $this->widget('zii.widgets.CDetailView', array(
+<?php
+    $types = array();
+    foreach ($model->musictypes as $i => $value) {
+        $types[$i] = $value->type_name;
+    }
+    $a = "No";
+    if($model->availability){
+        $a="Yes";
+    }
+
+    $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
-		'cid',
-		'aid',
-		'cdate',
-		'vid',
-		'price',
-		'availability',
-		'clink',
-		'cdescription',
-		'concert_tp',
+        array ( 'label'=>'Concert Time', 'value'=>$model->cdate ),
+        array ( 'label'=>'Concert Location', 'value'=>$model->v->vname ),
+        array ( 'label'=>'Ticket Price', 'value'=>$model->price ),
+        array ( 'label'=>'Availability', 'value'=>$a ),
+		array ( 'label'=>'Website', 'value'=>$model->clink ),
+		array ( 'label'=>'About Concert', 'value'=>$model->cdescription ),
+        array ( 'label'=>'Concert Music Type', 'type'=>'text', 'value'=>implode(", ", $types)),
+		//'concert_tp',
 	),
 )); ?>

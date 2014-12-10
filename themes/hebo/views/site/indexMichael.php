@@ -17,7 +17,7 @@ $this->pageTitle=Yii::app()->name;
     'itemView'=>'//concert/_view_with_names',
 
 )); ?>
-<h5 style='float:right'><a href="#"> View All Upcoming Concerts</a></h5>
+<h5 style='float:right'><a href="/musicinsanity/index.php/concert/index?future=true"> View All Upcoming Concerts</a></h5>
 <br/>
 <h1>Recent Concert Reviews</h1>
 <?php $this->widget('zii.widgets.CListView',array(
@@ -26,7 +26,7 @@ $this->pageTitle=Yii::app()->name;
     'itemView'=>'//concert/_review_with_names',
 
 )); ?>
-<h5 style='float:right'><a href="#"> View All Recent Concerts</a></h5>
+<h5 style='float:right'><a href="/musicinsanity/index.php/concert/index?future=false"> View All Recent Concerts</a></h5>
 <br/>
 <h1>Artists You Might Like</h1>
 <?php $this->widget('zii.widgets.CListView',array(
