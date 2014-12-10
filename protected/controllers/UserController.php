@@ -313,7 +313,13 @@ class UserController extends Controller
     }
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('User');
+		$dataProvider=new CActiveDataProvider('User', array(
+            'criteria'=>array(
+                'condition'=>'artist=0',
+
+            ),
+
+        ));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
