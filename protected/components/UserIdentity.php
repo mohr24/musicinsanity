@@ -29,11 +29,12 @@ class UserIdentity extends CUserIdentity
             if($record->artist){
                 $this->setState('artist', true);
                 $this->setState('aid', $record->uid);
-
+                $this->setState('reputation', $record->reputation);
             }else{
+                $this->setState('reputation', $record->reputation);
                 $this->setState('artist', false);
             }
-
+            $this->setState('lastLoginTime', $record->last_login_tp);
             $this->errorCode=self::ERROR_NONE;
         }
         return !$this->errorCode;

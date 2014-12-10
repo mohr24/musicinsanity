@@ -28,7 +28,7 @@ class MusictypeController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view', 'chooseArtist', 'chooseUser', 'chooseConcert'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -92,6 +92,15 @@ class MusictypeController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
+    public function actionChooseArtist()
+    {
+    }
+    public function actionChooseUser()
+    {
+    }
+    public function actionChooseConcert()
+    {
+    }
 	public function actionCreate()
 	{
 		$model=new Musictype;

@@ -32,7 +32,7 @@ class ConcertController extends Controller
                 'users'=>array('*'),
             ),*/
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions'=>array('attend','update','unattend', 'review','index','view','create'),
+                'actions'=>array('attend','update','unattend', 'review','index','view','create','createUser'),
                 'users'=>array('@'),
             ),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -91,6 +91,27 @@ class ConcertController extends Controller
 			'model'=>$model,
 		));
 	}
+    
+    public function actionCreateUser()
+    {
+        $model=new Concert;
+        
+        // Uncomment the following line if AJAX validation is needed
+        // $this->performAjaxValidation($model);
+        
+        if(isset($_POST['Concert']))
+        {
+            $model->attributes=$_POST['Concert'];
+            $model->submitted_by_uid = Yii::app()->user->id;
+            $model->concert_tp = new CDbExpression('CURRENT_DATE()');
+            if($model->save())
+                $this->redirect(array('//list/add','cid'=>$model->cid, 'return'=>"home"));
+        }
+        
+        $this->render('create_user',array(
+                                     'model'=>$model,
+                                     ));
+    }
 
 	/**
 	 * Updates a particular model.

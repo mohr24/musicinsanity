@@ -2,7 +2,13 @@
 /* @var $this SiteController */
 
 $this->pageTitle=Yii::app()->name;
-$this->menu=array(array('label'=>'View Your List', 'url'=>array('/musicinsanity/index.php/list/index')));
+    $reputation=Yii::app()->user->reputation;
+    if($reputation >= 6){
+        $this->menu=array(array('label'=>'View Your List', 'url'=>array('/musicinsanity/index.php/list/index')), array('label'=>'Create User Concert', 'url'=>array('/musicinsanity/index.php/concert/createUser')));
+    }
+    else{
+        $this->menu=array(array('label'=>'View Your List', 'url'=>array('/musicinsanity/index.php/list/index')));
+    }
 ?>
 <h1>Upcoming Concerts</h1>
 <?php $this->widget('zii.widgets.CListView',array(

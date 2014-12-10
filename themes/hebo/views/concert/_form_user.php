@@ -25,6 +25,12 @@
         <?php echo $form->error($model,'cname'); ?>
     </div>
 
+    <div class="row">
+        <?php echo $form->labelEx($model,'Artist'); ?>
+    <?php echo $form->dropDownList($model,'aid', CHtml::listData(Artist::model()->findAll(array('order' => 'aname ASC')), 'aid', 'aname'), array('empty'=>'Select Artist')); ?>
+    <?php echo $form->error($model,'vid'); ?>
+    </div>
+
 	<div class="row">
 		<?php echo $form->labelEx($model,'Concert Date and Time'); ?>
 		<?php echo $form->textField($model,'cdate'); ?>

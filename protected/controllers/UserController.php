@@ -213,7 +213,7 @@ class UserController extends Controller
         {
             $usermodel->attributes=$_POST['User'];
             $artistmodel->attributes=$_POST['Artist'];
-            $usermodel->reputation=0;
+            $usermodel->reputation=10;
             $usermodel->last_login_tp= new CDbExpression('CURRENT_DATE()');
             $usermodel->uname = $artistmodel->aname;
             $usermodel->artist=1;
