@@ -9,13 +9,13 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Concert', 'url'=>array('index')),
-	array('label'=>'Create Concert', 'url'=>array('create')),
-	array('label'=>'View Concert', 'url'=>array('view', 'id'=>$model->cid)),
-	array('label'=>'Manage Concert', 'url'=>array('admin')),
+//	array('label'=>'List Concert', 'url'=>array('index')),
+//	array('label'=>'Create Concert', 'url'=>array('create')),
+//	array('label'=>'View Concert', 'url'=>array('view', 'id'=>$model->cid)),
+//	array('label'=>'Manage Concert', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Update Concert <?php echo $model->cid; ?></h1>
+<h1>Update This Concert</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

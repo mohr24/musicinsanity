@@ -64,12 +64,7 @@ class ArtistController extends Controller
                 array(':aid'=>$artistModel->aid ))
             ->queryAll();
         foreach($futureconcertinfo as $i=>$concert){
-            $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>$user_id,':cid'=>$concert['cid']));
-            if($userConcert){
-                $futureconcertinfo[$i]['attending']="Yes";
-            }else{
-                $futureconcertinfo[$i]['attending']="No";
-            }
+            $futureconcertinfo[$i]["artist"] = true;
         }
         $dataProviderUpcomingConcerts =new CArrayDataProvider($futureconcertinfo, array(
             'keyField'=>'cid',

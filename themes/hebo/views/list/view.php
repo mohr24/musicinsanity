@@ -29,5 +29,5 @@ $this->menu=array(
     'itemView'=>'//concert/_view_with_names',
 
 )); ?>
-
-<a href="<?php echo Yii::app()->getBaseUrl(true);?>/index.php/concert/index?future=true">Add concerts to this list</a>
+<?php
+    echo CHtml::button('Add concerts to this list', array ('class'=>'btn btn-primary','style' => "margin-top: 20px;", 'submit'=>$this->createUrl('concert/index?future=true')));?>

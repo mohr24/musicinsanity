@@ -17,18 +17,18 @@
                     'items'=>array(
 						array('label'=>'Home', 'url'=>array('/site/index'),'linkOptions'=>array("data-description"=>"Your home page"),),
                                    
-						array('label'=>'Music Styles <span class="caret"></span>', 'url'=>array('/musictype/index'),'itemOptions'=>array('class'=>'dropdown','tabindex'=>"-1"),'linkOptions'=>array('class'=>'dropdown-toggle','data-toggle'=>"dropdown","data-description"=>"4 major styles"),
-                        'items'=>array(
-                            array('label'=>'Rock/Pop', 'url'=>array('/musictype/rock')),
-							array('label'=>'Hiphop', 'url'=>array('/musictype/hiphop')),
-							array('label'=>'Country', 'url'=>array('/musictype/country')),
-							array('label'=>'Jazz/Blues', 'url'=>array('/musictype/jazz')),
-                        )),
+//						array('label'=>'Music Styles <span class="caret"></span>', 'url'=>array('/musictype/index'),'itemOptions'=>array('class'=>'dropdown','tabindex'=>"-1"),'linkOptions'=>array('class'=>'dropdown-toggle','data-toggle'=>"dropdown","data-description"=>"4 major styles"),
+//                        'items'=>array(
+//                            array('label'=>'Rock/Pop', 'url'=>array('/musictype/rock')),
+//							array('label'=>'Hiphop', 'url'=>array('/musictype/hiphop')),
+//							array('label'=>'Country', 'url'=>array('/musictype/country')),
+//							array('label'=>'Jazz/Blues', 'url'=>array('/musictype/jazz')),
+//                        )),
 						
 						array('label'=>'Peoples <span class="caret"></span>', 'url'=>array('/site/page', 'view'=>'columns'),'itemOptions'=>array('class'=>'dropdown','tabindex'=>"-1"),'linkOptions'=>array('class'=>'dropdown-toggle','data-toggle'=>"dropdown","data-description"=>"Browse People"),
                         'items'=>array(
                             array('label'=>'All Artists', 'url'=>array('/artist/index')),
-							array('label'=>'Popular Users', 'url'=>array('/user/index')),
+							array('label'=>'All Users', 'url'=>array('/user/index')),
                         )),
 
                         array('label'=>'Concerts <span class="caret"></span>', 'url'=>array('/site/page', 'view'=>'columns'),'itemOptions'=>array('class'=>'dropdown','tabindex'=>"-1"),'linkOptions'=>array('class'=>'dropdown-toggle','data-toggle'=>"dropdown","data-description"=>"Browse Concerts"),

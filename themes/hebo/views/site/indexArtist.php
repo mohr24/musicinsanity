@@ -2,13 +2,12 @@
 /* @var $this SiteController */
 
 $this->pageTitle=Yii::app()->name;
-$this->menu=array(array('label'=>'View Your List', 'url'=>array('/musicinsanity/index.php/list/index')));
-?>
+    ?>
 <h1>Upcoming Concerts</h1>
 <?php $this->widget('zii.widgets.CListView',array(
 
     'dataProvider'=>$dataProviderConcerts,
-    'itemView'=>'//concert/_view_with_names',
+    'itemView'=>'//concert/_view_artists',
 
 )); ?>
 <h5 style='float:right'><a href="#"> View All Upcoming Concerts</a></h5>
@@ -17,7 +16,7 @@ $this->menu=array(array('label'=>'View Your List', 'url'=>array('/musicinsanity/
 <?php $this->widget('zii.widgets.CListView',array(
 
     'dataProvider'=>$dataProviderReviews,
-    'itemView'=>'//concert/_review_with_names',
+    'itemView'=>'//concert/_review_artists',
 
 )); ?>
 <h5 style='float:right'><a href="#"> View All Recent Concerts</a></h5>

@@ -8,8 +8,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Concert', 'url'=>array('index')),
-	array('label'=>'Manage Concert', 'url'=>array('admin')),
+//	array('label'=>'List Concert', 'url'=>array('index')),
+//	array('label'=>'Manage Concert', 'url'=>array('admin')),
 );
 ?>
 

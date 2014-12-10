@@ -87,9 +87,9 @@ class UserController extends Controller
         foreach($futureconcertinfo as $i=>$concert){
             $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$concert['cid']));
             if($userConcert){
-                $upcomingConcerts[$i]['attending']="Yes";
+                $futureconcertinfo[$i]['attending']="Yes";
             }else{
-                $upcomingConcerts[$i]['attending']="No";
+                $futureconcertinfo[$i]['attending']="No";
             }
         }
         $dataProviderFutureConcerts=new CArrayDataProvider($futureconcertinfo, array(

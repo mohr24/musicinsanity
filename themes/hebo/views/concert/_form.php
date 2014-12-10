@@ -19,20 +19,26 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
+    <div class="row">
+        <?php echo $form->labelEx($model,'Concert Name'); ?>
+        <?php echo $form->textField($model,'cname'); ?>
+        <?php echo $form->error($model,'cname'); ?>
+    </div>
+
 	<div class="row">
-		<?php echo $form->labelEx($model,'cdate'); ?>
+		<?php echo $form->labelEx($model,'Concert Date'); ?>
 		<?php echo $form->textField($model,'cdate'); ?>
 		<?php echo $form->error($model,'cdate'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'vid'); ?>
-		<?php echo $form->textField($model,'vid'); ?>
+		<?php echo $form->labelEx($model,'Location'); ?>
+		<?php echo $form->dropDownList($model,'vid', CHtml::listData(Venue::model()->findAll(array('order' => 'vname ASC')), 'vid', 'vname'), array('empty'=>'Select location')); ?>
 		<?php echo $form->error($model,'vid'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'price'); ?>
+		<?php echo $form->labelEx($model,'Ticket Price'); ?>
 		<?php echo $form->textField($model,'price'); ?>
 		<?php echo $form->error($model,'price'); ?>
 	</div>
@@ -44,13 +50,13 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'clink'); ?>
+		<?php echo $form->labelEx($model,'Ticket Link'); ?>
 		<?php echo $form->textField($model,'clink',array('size'=>20,'maxlength'=>20)); ?>
 		<?php echo $form->error($model,'clink'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'cdescription'); ?>
+		<?php echo $form->labelEx($model,'About Concert'); ?>
 		<?php echo $form->textField($model,'cdescription',array('size'=>40,'maxlength'=>40)); ?>
 		<?php echo $form->error($model,'cdescription'); ?>
 	</div>

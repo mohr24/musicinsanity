@@ -12,14 +12,19 @@ if($follows){
 }else{
     $followButton = array('label'=>'Become a Fan', 'url'=>array('follow?thisArtist='.$model->aid));
 }
-$this->menu=array(
-    $followButton,
+$this->menu=array();
+if(Yii::app()->user->id != $model->aid){
+        $this->menu=array(
+                          $followButton,
 	/*array('label'=>'List Artist', 'url'=>array('index')),
 	array('label'=>'Create Artist', 'url'=>array('create')),
 	array('label'=>'Update Artist', 'url'=>array('update', 'id'=>$model->aid)),
 	array('label'=>'Delete Artist', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->aid),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage Artist', 'url'=>array('admin')),*/
-);
+                          );
+    }
+    else{
+    }
 ?>
 
 <h1><?php if($model->aid == Yii::app()->user->id) {echo "Your";} else{echo $model->aname."'s";} ?> Profile</h1>

@@ -17,27 +17,6 @@
 <div class="post_info">On   <b> <?php echo CHtml::encode($data['cdate']); ?></b>    <?php if(isset($data['aid'])){ echo ' By '.CHtml::link(CHtml::encode($data['aname']), array('//artist/view', 'id'=>$data['aid']));}  ?></div>
 </div>
 
-<?php
-    //echo $data['cid'];
-    if(isset($data['attending'])){
-    if(strcmp ( $data['attending'], "No" )){
-        echo CHtml::button('Unattend', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('concert/unattend',array('id'=>$data['cid'], 'return'=>"home"))));
-    }
-    else {
-        echo CHtml::button('Attend', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('concert/attend',array('id'=>$data['cid'], 'return'=>"home"))));
-    }
-    }
-    if(isset($data['artist'])){}
-    else{
-    if(isset($data['listing'])){
-        echo CHtml::button('Remove', array ('class'=>'btn btn-primary','style' => "margin-top: 20px; margin-left: 10px", 'submit'=>$this->createUrl('list/remove',array('cid'=>$data['cid'], 'lid'=>$data['lid'], 'return'=>"home"))));
-    }
-    else{
-        echo CHtml::button('Add to List', array ('class'=>'btn btn-primary','style' => "margin-top: 20px; margin-left: 10px", 'submit'=>$this->createUrl('list/add',array('cid'=>$data['cid'], 'return'=>"home"))));
-    }
-    }
-    ?>
-
 <div class="cleaner"></div>
 
 <img src="<?php echo Yii::app()->theme->baseUrl;?>/img/music/concert.jpg" alt="image" />

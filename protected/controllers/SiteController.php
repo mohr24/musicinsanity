@@ -29,8 +29,9 @@ class SiteController extends Controller
 	public function actionIndex()
 	{
         $user_id = Yii::app()->user->getId();
-        $this->layout = '//layouts/column2';
+        
         if($user_id && !Yii::app()->user->artist){
+            $this->layout = '//layouts/column2';
             $upcomingConcerts = Yii::app()->db->createCommand()
                 // ->select('co.course_name, cl.section_id')
                 ->select('c.*,a.aname, a.aid,v.vname, v.city')
@@ -99,6 +100,7 @@ class SiteController extends Controller
                 'dataProviderArtists'=>$dataProviderArtists,
             ));
         }else if($user_id && Yii::app()->user->artist){
+            $this->layout = '//layouts/column2';
             $upcomingConcerts = Yii::app()->db->createCommand()
                 // ->select('co.course_name, cl.section_id')
                 ->select('c.*,a.aname, a.aid,v.vname, v.city')
