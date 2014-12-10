@@ -15,8 +15,6 @@
         'enableAjaxValidation'=>false,
     )); ?>
 
-    //<p class="note">Fields with <span class="required">*</span> are required.</p>
-
     <?php echo $form->errorSummary($concertList); ?>
     <?php foreach($lists as $list){?>
         <div class="row">
@@ -24,6 +22,7 @@
             <?php echo $form->radioButton($concertList,'lid',array('value'=>$list->lid,'uncheckValue'=>null));?>
             <?php echo $form->error($concertList,'lid'); ?>
         </div>
+</br>
     <?php } ?>
 
     <div class="row buttons">

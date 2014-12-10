@@ -22,7 +22,7 @@ $this->menu=array(
 );
 ?>
 
-<h1><?php echo $model->aname; ?></h1>
+<h1><?php if($model->aid == Yii::app()->user->id) {echo "Your";} else{echo $model->aname."'s";} ?> Profile</h1>
 
 
 <?php $this->widget('zii.widgets.CDetailView', array(
@@ -41,7 +41,7 @@ $this->menu=array(
     echo $type->type_name."\n";
 }?>
 <br/>
-<h1>Upcoming Concerts</h1>
+<h1><?php if($model->aid == Yii::app()->user->id) {echo "Your";} else{echo $model->aname."'s";} ?> Upcoming Concerts</h1>
 <?php $this->widget('zii.widgets.CListView',array(
 
     'dataProvider'=>$dataProviderUpcomingConcerts,
@@ -53,7 +53,7 @@ $this->menu=array(
     'itemView'=>'//concert/_view_with_names',
 
 )); ?>
-<h1>Recent Concert Reviews</h1>
+<h1><?php if($model->aid == Yii::app()->user->id) {echo "Your";} else{echo $model->aname."'s";} ?> Recent Concert Reviews</h1>
 <?php $this->widget('zii.widgets.CListView',array(
 
     'dataProvider'=>$dataProviderRecentReviews,

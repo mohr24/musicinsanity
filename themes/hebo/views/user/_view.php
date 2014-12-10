@@ -22,7 +22,7 @@
 <img src="<?php echo Yii::app()->theme->baseUrl;?>/img/music/user.png" alt="user image" />
 </div>
 
-<p>Male &nbsp <b><?php echo CHtml::encode("Born At: "); ?></b><?php if($data->birthday) {echo CHtml::encode($data->birthday);} else {echo CHtml::encode("Secret");}?><b>&nbsp&nbsp
+<p><b><?php echo CHtml::encode("Gender: "); ?></b><?php if($data->gender != null){ if($data->gender == 1){echo CHtml::encode("Female");} else{echo CHtml::encode("Female");} }else {echo CHtml::encode("Secret");} ?> &nbsp <b><?php echo CHtml::encode("Born At: "); ?></b><?php if($data->birthday) {echo CHtml::encode($data->birthday);} else {echo CHtml::encode("Secret");}?><b>&nbsp&nbsp
 
 <?php echo CHtml::encode("From City: "); ?></b><?php if($data->city_residence){ echo CHtml::encode($data->city_residence);} else { echo CHtml::encode("Secret");}?> </br>
 <b><?php echo CHtml::encode("Contact"); ?>:</b>

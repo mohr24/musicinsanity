@@ -52,12 +52,14 @@ class ListController extends Controller
 	public function actionView($id)
 	{
         $concertinfo = Yii::app()->db->createCommand()
-            ->select('c.cid,c.cdate,c.clink,c.cdescription, a.aid ,a.aname,v.vname, v.city')
+            ->select('c.cid,c.cdate, c.cname, c.clink,c.cdescription, a.aid ,a.aname,v.vname, v.city')
             ->from('concert c, artist a, venue v, concert_list cl')
             ->where('cl.lid = :lid and cl.cid = c.cid and c.aid = a.aid and c.vid = v.vid',
                 array(':lid'=>$id ))
             ->queryAll();
         foreach($concertinfo as $i=>$concert){
+            $concertinfo[$i]['lid'] = $id;
+            $concertinfo[$i]['listing'] = "Yes";
             $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$concert['cid']));
             if($userConcert){
                 $concertinfo[$i]['attending']="Yes";
@@ -147,7 +149,12 @@ class ListController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('ListModel');
+        $listinfo = Yii::app()->db->createCommand()
+        ->select('l.*')
+        ->from('list l')
+        ->where('l.uid= :uid',array(':uid'=>Yii::app()->user->getId()))
+        ->queryAll();
+		$dataProvider=new CArrayDataProvider($listinfo, array('keyField'=>'lid'));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));

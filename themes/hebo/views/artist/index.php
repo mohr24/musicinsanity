@@ -7,8 +7,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'Create Artist', 'url'=>array('create')),
-	array('label'=>'Manage Artist', 'url'=>array('admin')),
+//	array('label'=>'Create Artist', 'url'=>array('create')),
+//	array('label'=>'Manage Artist', 'url'=>array('admin')),
 );
 ?>
 

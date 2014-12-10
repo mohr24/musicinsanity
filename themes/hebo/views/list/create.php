@@ -8,11 +8,11 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List ListModel', 'url'=>array('index')),
-	array('label'=>'Manage ListModel', 'url'=>array('admin')),
+//	array('label'=>'List ListModel', 'url'=>array('index')),
+//	array('label'=>'Manage ListModel', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Create new artists account</h1>
+<h1>Create A New List</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

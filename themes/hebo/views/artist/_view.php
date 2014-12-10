@@ -8,7 +8,7 @@
 <div class="lbox">
 <h2><span class="yellow">
 <?php echo "Featured Artist: "; ?></span>
-<?php echo CHtml::link(CHtml::encode($data->aname), array('view', 'id'=>$data->aid)); ?><?php
+<?php echo CHtml::link(CHtml::encode($data->aname), array('//artist/view', 'id'=>$data->aid)); ?><?php
     if(isset($data['fan'])){
         if(strcmp($data['fan'], "No")){
             echo CHtml::button('Become Fan', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('fan',array('id'=>$data['aid']))));

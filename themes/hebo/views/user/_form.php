@@ -49,6 +49,17 @@
 		<?php echo $form->error($model,'birthday'); ?>
 	</div>
 
+    <div class="row">
+    <?php echo $form->labelEx($model,'Gender'); ?>
+    <?php echo $form->radioButton($model,'gender', array('value'=>0,  'id'=>'Male', 'uncheckValue'=>null)) .' Male '; ?>
+    <?php echo $form->radioButton($model,'gender', array('value'=>1, 'id'=>'Female', 'uncheckValue'=>null)) . ' Female '; ?>
+    <?php echo $form->radioButton($model,'gender', array('value'=>null, 'id'=>'Other', 'uncheckValue'=>null)) . ' Secret '; ?>
+    <?php echo $form->error($model,'gender'); ?>
+    <br>
+    <br>
+    <?php echo $form->error($model,'birthday'); ?>
+    </div>
+
 	<div class="row">
 		<?php echo $form->labelEx($model,'City of Residence'); ?>
 		<?php echo $form->textField($model,'city_residence',array('size'=>20,'maxlength'=>20)); ?>

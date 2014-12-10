@@ -30,7 +30,7 @@ if(isset($editProfile)){
 
 ?>
 
-    <h1><?php echo $model->uname; ?></h1>
+<h1><?php if($model->uid == Yii::app()->user->id) {echo "Your";} else{echo $model->uname."'s";} ?> Profile</h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
     'data'=>$model,
@@ -44,7 +44,7 @@ if(isset($editProfile)){
     ),
 ));?>
 <br/>
-<h2>Artists this user is a fan of</h2>
+<h1><?php if($model->uid == Yii::app()->user->id) {echo "You are";} else{echo $model->uname . " is";} ?> Fan of</h1>
 <?php $this->widget('zii.widgets.CListView',array(
 
     'dataProvider'=>$dataProviderArtists,
@@ -57,7 +57,7 @@ if(isset($editProfile)){
 )); ?>
 
 <br/>
-<h1>Users this user is following</h1>
+<h1> <?php if($model->uid == Yii::app()->user->id) {echo "You are";} else{echo $model->uname . " is";} ?> Following:</h1>
 <?php $this->widget('zii.widgets.CListView',array(
 
     'dataProvider'=>$dataProviderFollowing,
@@ -69,7 +69,7 @@ if(isset($editProfile)){
 
 )); ?>
 <br/>
-<h1>Concerts this user plans to attend</h1>
+<h1>Concerts <?php if($model->uid == Yii::app()->user->id) {echo "you plan";} else{echo $model->uname . " plans";} ?> to attend</h1>
 <?php $this->widget('zii.widgets.CListView',array(
 
     'dataProvider'=>$dataProviderFutureConcerts,
@@ -95,7 +95,7 @@ if(isset($editProfile)){
 )); ?>
 
     <br/>
-    <h1>User's Lists</h1>
+    <h1><?php if($model->uid == Yii::app()->user->id) {echo "Your";} else{echo $model->uname."'s";} ?> Lists</h1>
 <?php $this->widget('zii.widgets.CListView',array(
 
     'dataProvider'=>$dataProviderLists,

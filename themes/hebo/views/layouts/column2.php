@@ -25,6 +25,12 @@
         echo "<li><a href=".Yii::app()->getBaseUrl(true) . "/index.php/list/create?uid=". Yii::app()->user->getId() . ">Create a List</a></li>";
 
     }
+    if(isset(Yii::app()->user->artist) and Yii::app()->user->artist){
+        echo "<li><a href=".Yii::app()->getBaseUrl(true) . "/index.php/artist/". Yii::app()->user->aid . ">View Your Profile</a></li>";
+    }else{
+        echo "<li><a href=".Yii::app()->getBaseUrl(true) . "/index.php/user/". Yii::app()->user->getId() . ">View Your Profile</a></li>";
+        
+    }
     ?>
 
 </ul>
