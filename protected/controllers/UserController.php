@@ -225,6 +225,7 @@ class UserController extends Controller
                     $userArtist = new UserArtist();
                     $userArtist->uid=$usermodel->uid;
                     $userArtist->aid=$artistmodel->aid;
+                    $userArtist->fan_tp= new CDbExpression('CURRENT_DATE()');
                     if($userArtist->save()){
                         $this->redirect(array('//site/login'));
                     }
