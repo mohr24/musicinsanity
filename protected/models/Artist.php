@@ -5,8 +5,6 @@
  *
  * The followings are the available columns in table 'artist':
  * @property integer $aid
- * @property string $ausername
- * @property string $apassword
  * @property string $aname
  * @property string $aemail
  * @property string $alink
@@ -18,7 +16,6 @@
  * @property ArtistArtist[] $artistArtists1
  * @property Musictype[] $musictypes
  * @property Concert[] $concerts
- * @property Recommendation[] $recommendations
  * @property User[] $users
  */
 class Artist extends CActiveRecord
@@ -39,13 +36,13 @@ class Artist extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('ausername, apassword, aname, aemail, last_login_tp', 'required'),
-			array('ausername, aname', 'length', 'max'=>20),
-			array('apassword', 'length', 'max'=>10),
-			array('aemail, alink, abio', 'length', 'max'=>40),
+			array('aname, aemail, last_login_tp', 'required'),
+			array('aname', 'length', 'max'=>20),
+			array('aemail, alink', 'length', 'max'=>40),
+			array('abio', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('aid, ausername, apassword, aname, aemail, alink, abio, last_login_tp', 'safe', 'on'=>'search'),
+			array('aid, aname, aemail, alink, abio, last_login_tp', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,7 +58,6 @@ class Artist extends CActiveRecord
 			'artistArtists1' => array(self::HAS_MANY, 'ArtistArtist', 'faid'),
 			'musictypes' => array(self::MANY_MANY, 'Musictype', 'artist_musictype(aid, type_name)'),
 			'concerts' => array(self::HAS_MANY, 'Concert', 'aid'),
-			'recommendations' => array(self::HAS_MANY, 'Recommendation', 'aid'),
 			'users' => array(self::MANY_MANY, 'User', 'user_artist(aid, uid)'),
 		);
 	}
@@ -73,8 +69,6 @@ class Artist extends CActiveRecord
 	{
 		return array(
 			'aid' => 'Aid',
-			'ausername' => 'Ausername',
-			'apassword' => 'Apassword',
 			'aname' => 'Aname',
 			'aemail' => 'Aemail',
 			'alink' => 'Alink',
@@ -102,8 +96,6 @@ class Artist extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('aid',$this->aid);
-		$criteria->compare('ausername',$this->ausername,true);
-		$criteria->compare('apassword',$this->apassword,true);
 		$criteria->compare('aname',$this->aname,true);
 		$criteria->compare('aemail',$this->aemail,true);
 		$criteria->compare('alink',$this->alink,true);

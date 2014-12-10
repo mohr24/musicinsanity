@@ -33,8 +33,8 @@
 
                         array('label'=>'Concerts <span class="caret"></span>', 'url'=>array('/site/page', 'view'=>'columns'),'itemOptions'=>array('class'=>'dropdown','tabindex'=>"-1"),'linkOptions'=>array('class'=>'dropdown-toggle','data-toggle'=>"dropdown","data-description"=>"Browse Concerts"),
                         'items'=>array(
-                            array('label'=>'Future Concerts', 'url'=>array('/concert/index')),
-                            array('label'=>'Past Concerts', 'url'=>array('/concert/index')),
+                            array('label'=>'Future Concerts', 'url'=>array('/concert/index?future=true')),
+                            array('label'=>'Past Concerts', 'url'=>array('/concert/index?future=false')),
                         )),
                                    
                         array('label'=>'Search', 'url'=>array('/site/search'),'linkOptions'=>array("data-description"=>"search what you want"),),

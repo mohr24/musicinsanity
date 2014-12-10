@@ -13,6 +13,9 @@
  * @property string $clink
  * @property string $cdescription
  * @property string $concert_tp
+ * @property integer $submitted_by_uid
+ * @property string $cname
+ * @property string $time
  *
  * The followings are the available model relations:
  * @property Artist $a
@@ -39,12 +42,13 @@ class Concert extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('aid, cdate, vid, concert_tp', 'required'),
-			array('aid, vid, price, availability', 'numerical', 'integerOnly'=>true),
-			array('clink', 'length', 'max'=>20),
-			array('cdescription', 'length', 'max'=>40),
+			array('aid, vid, price, availability, submitted_by_uid', 'numerical', 'integerOnly'=>true),
+			array('clink, cname', 'length', 'max'=>20),
+			array('cdescription', 'length', 'max'=>100),
+			array('time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('cid, aid, cdate, vid, price, availability, clink, cdescription, concert_tp', 'safe', 'on'=>'search'),
+			array('cid, aid, cdate, vid, price, availability, clink, cdescription, concert_tp, submitted_by_uid, cname, time', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -78,6 +82,9 @@ class Concert extends CActiveRecord
 			'clink' => 'Clink',
 			'cdescription' => 'Cdescription',
 			'concert_tp' => 'Concert Tp',
+			'submitted_by_uid' => 'Submitted By Uid',
+			'cname' => 'Cname',
+			'time' => 'Time',
 		);
 	}
 
@@ -108,6 +115,9 @@ class Concert extends CActiveRecord
 		$criteria->compare('clink',$this->clink,true);
 		$criteria->compare('cdescription',$this->cdescription,true);
 		$criteria->compare('concert_tp',$this->concert_tp,true);
+		$criteria->compare('submitted_by_uid',$this->submitted_by_uid);
+		$criteria->compare('cname',$this->cname,true);
+		$criteria->compare('time',$this->time,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
