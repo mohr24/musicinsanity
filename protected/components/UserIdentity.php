@@ -26,9 +26,9 @@ class UserIdentity extends CUserIdentity
         else
         {
             $this->_id=$record->uid;
-            if(isset($record->aid)){
+            if($record->artist){
                 $this->setState('artist', true);
-                $this->setState('aid', $record->aid);
+                $this->setState('aid', $record->uid);
 
             }else{
                 $this->setState('artist', false);

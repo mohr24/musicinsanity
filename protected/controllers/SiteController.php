@@ -55,10 +55,10 @@ class SiteController extends Controller
                      'attributes'=>array(
                          'id', 'username', 'email',
                      ),
-                 ),
+                 ),*/
                  'pagination'=>array(
                      'pageSize'=>10,
-                 ),*/
+                 ),
             ));
             $recentReviews = Yii::app()->db->createCommand()
                 // ->select('co.course_name, cl.section_id')
@@ -99,8 +99,52 @@ class SiteController extends Controller
                 'dataProviderArtists'=>$dataProviderArtists,
             ));
         }else if($user_id && Yii::app()->user->artist){
-            //render artist home page
-            $this->layout = '//layouts/column2';
+            $upcomingConcerts = Yii::app()->db->createCommand()
+                // ->select('co.course_name, cl.section_id')
+                ->select('c.*,a.aname, a.aid,v.vname, v.city')
+                ->from('concert c, artist a, venue v, user_artist ua')
+                ->where('ua.uid = :uid and ua.aid = a.aid and c.aid = a.aid and c.vid = v.vid and
+              (c.cdate between CURRENT_DATE() and (CURRENT_DATE() + interval 14 day)) ',
+                    array(':uid'=>$user_id,))
+                ->queryAll();
+            $dataProviderConcerts=new CArrayDataProvider($upcomingConcerts, array(
+                'keyField'=>'cid',
+                //   'id'=>'cid',
+                /* 'sort'=>array(
+                     'attributes'=>array(
+                         'id', 'username', 'email',
+                     ),
+                 ),*/
+                'pagination'=>array(
+                    'pageSize'=>10,
+                ),
+            ));
+            $reviews = Yii::app()->db->createCommand()
+                // ->select('co.course_name, cl.section_id')
+                ->select('u.uid, u.uname, uc.rate, uc.review, c.*, v.vname, v.city, a.aid, a.aname')
+                ->from('concert c, artist a, venue v, user_concert uc, user u')
+                ->where('a.aid = :aid and c.cid = uc.cid and c.aid = a.aid and c.vid = v.vid and u.uid = uc.uid and
+            (c.cdate between (CURRENT_DATE() - interval 30 day) and CURRENT_DATE())',
+                    array(':aid'=>Yii::app()->user->aid ))
+                ->queryAll();
+
+            $dataProviderRecentReviews=new CArrayDataProvider($reviews, array(
+                'keyField'=>'cid',
+            ));
+
+            $artistsWithSimilarFans = Artist::model()->findAllBySql('select a.*, count(ua2.uid)
+            from artist a, user_artist ua1, user_artist ua2
+            where ua1.aid = :aid and ua1.uid = ua2.uid and ua2.aid = a.aid and ua1.aid != ua2.aid
+            group by a.aid
+            having count(ua2.uid) > 1',array(':aid'=>Yii::app()->user->aid));
+            $dataProviderArtists = new CArrayDataProvider($artistsWithSimilarFans, array(
+                'keyField'=>'aid',
+            ));
+            $this->render('indexArtist',array(
+                'dataProviderConcerts'=>$dataProviderConcerts,
+                'dataProviderReviews'=>$dataProviderRecentReviews,
+                'dataProviderArtists'=>$dataProviderArtists,
+            ));
         }
         else{
 

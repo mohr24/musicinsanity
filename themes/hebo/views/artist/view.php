@@ -62,6 +62,6 @@ $this->menu=array(
          'cdate',
          'vname',
      ),*/
-    'itemView'=>'//concert/_view_with_names',
+    'itemView'=>'//concert/_review_with_names',
 
 )); ?>

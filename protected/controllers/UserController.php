@@ -222,7 +222,15 @@ class UserController extends Controller
                 $artistmodel->aemail=$usermodel->uemail;
                 $artistmodel->last_login_tp= new CDbExpression('CURRENT_DATE()');
                 if($artistmodel->save()){
-                    $this->redirect(array('//site/login'));
+                    $userArtist = new UserArtist();
+                    $userArtist->uid=$usermodel->uid;
+                    $userArtist->aid=$artistmodel->aid;
+                    if($userArtist->save()){
+                        $this->redirect(array('//site/login'));
+                    }
+                    else{
+                        print_r($userArtist->getErrors());
+                    }
                 }
                 else{
                     print_r($artistmodel->getErrors());

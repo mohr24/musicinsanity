@@ -82,6 +82,7 @@ class ConcertController extends Controller
 		{
 			$model->attributes=$_POST['Concert'];
             $model->aid=$aid;
+            $model->concert_tp = new CDbExpression('CURRENT_DATE()');
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->cid));
 		}
