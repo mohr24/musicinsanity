@@ -1,34 +1,32 @@
-<?php
-/* @var $this ListController */
-/* @var $model ListModel */
-/* @var $form CActiveForm */
-?>
-
 <div class="form">
 
-    <?php $form=$this->beginWidget('CActiveForm', array(
-        'id'=>'choose-list-form',
-        // Please note: When you enable ajax validation, make sure the corresponding
-        // controller action is handling ajax validation correctly.
-        // There is a call to performAjaxValidation() commented in generated controller code.
-        // See class documentation of CActiveForm for details on this.
-        'enableAjaxValidation'=>false,
-    )); ?>
-
-    <?php echo $form->errorSummary($concertList); ?>
-    <?php foreach($lists as $list){?>
-        <div class="row">
-            <?php echo $form->labelEx($types,$list->type_name); ?>
-            <?php echo $form->radioButton($concertList,'lid',array('value'=>$list->lid,'uncheckValue'=>null));?>
-            <?php echo $form->error($concertList,'lid'); ?>
-        </div>
-</br>
-    <?php } ?>
-
-    <div class="row buttons">
-        <?php echo CHtml::submitButton('Choose'); ?>
-    </div>
-
-    <?php $this->endWidget(); ?>
-
+<?php
+    $i=0;
+    $form=$this->beginWidget('CActiveForm', array('id'=>'choose-form','enableAjaxValidation'=>false));
+    ?>
+<?php
+    foreach ($types as $type) {
+        $this->renderPartial('_form_choose', array('type'=>$type, 'lists'=>$lists,'form'=>$form, 'i'=>++$i));
+        
+    }
+    
+    ?>
+<div class="row buttons">
+<?php echo CHtml::submitButton('Choose'); ?>
+</div>
+<?php $this->endWidget(); ?>
 </div><!-- form -->
+<?php
+        echo $form->labelEx($type,$type->type_name);
+                $check=false;
+                foreach ($lists as $list) {
+                    if($list->type_name == $type->type_name){
+                        echo $form->checkBox($type,'type_name',array('value'=>$type['type_name'], 'checked'=>true, 'uncheckValue'=>null));
+                        $check=true;
+                        break;
+                    }
+                }
+                if($check == false){
+                    echo $form->checkBox($type,'type_name',array('value'=>$type['type_name'], 'checked'=>false, 'uncheckValue'=>null));
+                }
+    ?>

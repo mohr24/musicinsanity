@@ -48,8 +48,8 @@ return array(
 			'rules'=>array(
                 'musictype/index'=>'musictype/index',
                 'musictype/chooseArtist'=>'musictype/chooseArtist',
-                'musictype/chooseArtist'=>'musictype/chooseUser',
-                'musictype/chooseArtist'=>'musictype/chooseConcert',
+                'musictype/chooseUser'=>'musictype/chooseUser',
+                'musictype/chooseConcert'=>'musictype/chooseConcert',
 				'musictype/<id:\w+>'=>'musictype/view',
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
@@ -67,7 +67,7 @@ return array(
 			'connectionString' => 'mysql:host=localhost;dbname=musicinsanity',
 			'emulatePrepare' => true,
 			'username' => 'root',
-			'password' => '',
+			'password' => 'root',
 			'charset' => 'utf8',
 		),
 
