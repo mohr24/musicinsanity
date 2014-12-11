@@ -41,6 +41,7 @@ class SearchController extends Controller
     {
         $allMusictypes = Musictype::model()->findAll();
 
+
         if(isset($_GET['type']))
         {
             $type = Musictype::model()->find('type_name=:type',array(':type'=>$_GET['type']));
@@ -90,11 +91,12 @@ class SearchController extends Controller
                 'musictype'=>$type,
             ));
         }
+        else {
+            $this->render('musictypes',array(
+                                             'allMusictypes'=>$allMusictypes,
+                                             ));
+        }
 
-
-        $this->render('musictypes',array(
-            'allMusictypes'=>$allMusictypes,
-        ));
     }
 
     public function actionUsers(){

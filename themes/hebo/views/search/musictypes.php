@@ -17,14 +17,15 @@ $this->menu=array(
     <?php
 
     foreach($allMusictypes as $type){
-        echo '<input type="radio" name="type" value="'.$type->type_name.'"';
+        echo '<input  style="margin-top:-1px" type="radio" name="type" value="'.$type->type_name.'"';
         if(isset($_GET['type']) && $_GET['type']== $type->type_name){
             echo ' checked';
         }
-        echo '>'.$type->type_name.'<br>';
+        echo ">   <b>".$type->type_name.'</b><br>';
     }?>
     <input type="submit" value="search" />
 </form>
+
 <?php if(isset($musictype)){?>
 
     <?php if($dataProviderArtists) { ?>

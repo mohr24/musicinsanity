@@ -39,10 +39,10 @@
                                    
                         array('label'=>'Search <span class="caret"></span>', 'url'=>array('/site/search'),'itemOptions'=>array('class'=>'dropdown','tabindex'=>"-1"),'linkOptions'=>array('class'=>'dropdown-toggle','data-toggle'=>"dropdown","data-description"=>"Search By/For"),
                               'items'=>array(
-                                array ( 'label'=>'Music Types', 'url'=>array('/search/index') ),
-                                array ( 'label'=>'Artists', 'url'=>array('/search/index') ),
-                                array ( 'label'=>'Fans', 'url'=>array('/search/index') ),
-                                array ( 'label'=>'Concerts', 'url'=>array('/search/index') ),
+                                array ( 'label'=>'Music Types', 'url'=>array('/search/musictypes') ),
+                                array ( 'label'=>'Artists', 'url'=>array('/search/artists') ),
+                                array ( 'label'=>'Fans', 'url'=>array('/search/users') ),
+                                array ( 'label'=>'Concerts', 'url'=>array('/search/concerts') ),
                               )),
                        
                         array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
