@@ -7,8 +7,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'Create Musictype', 'url'=>array('create')),
-	array('label'=>'Manage Musictype', 'url'=>array('admin')),
+//	array('label'=>'Create Musictype', 'url'=>array('create')),
+//	array('label'=>'Manage Musictype', 'url'=>array('admin')),
 );
 ?>
 

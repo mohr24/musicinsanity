@@ -53,10 +53,15 @@
 <br/>
 <?php echo CHtml::encode($data['cdescription']); ?>
 </p>
-<?php if(isset($data['attending'])){
-    echo '<b>'.CHtml::encode("Plan to Attend? ").': </b>'.
-    CHtml::encode($data['attending']).
-    '<br/>';
+<?php
+    if($data['submitted_by_uid'] != null){
+    $criteria=new CDbCriteria;
+    $criteria->select='uname';
+    $criteria->condition="uid=:uid";
+    $criteria->params=array(':uid'=>$data['submitted_by_uid']);
+    $record=User::model()->find($criteria);
+    echo "<i style='float:right; color:#FF0000'>".CHtml::encode("Recommended By User").': '.
+    CHtml::encode($record->uname)."</i><br/>";
 }?>
 
 </div>

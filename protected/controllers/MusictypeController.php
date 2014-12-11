@@ -29,12 +29,12 @@ class MusictypeController extends Controller
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view', 'chooseArtist', 'chooseUser', 'chooseConcert'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
 				'users'=>array('@'),
 			),
+//			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+//				'actions'=>array('create','update'),
+//				'users'=>array('*'),
+//			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
 				'users'=>array('admin'),
@@ -94,12 +94,54 @@ class MusictypeController extends Controller
 	 */
     public function actionChooseArtist($aid)
     {
+        $artistModel = Artist::model()->findByPk($aid);
+        $changedTypes = $artistModel->musictypes;
+        $artistMusic = new ArtistMusictype();
+        $types = Musictype::model()->findAll();
+        if(isset($_POST['ArtistMusicTypes']))
+        {
+            $changedTypes = $_POST['ArtistMusicTypes'];
+            foreach ($_POST['ArtistMusicTypes'] as $i => $value) {
+                $artistMusic->attributes=$value;
+                $artistMusic->aid=$aid;
+                if(ArtistMusicType::model()->exits('aid=:aid and type_name=:type_name', array(':aid'=>$artistMusic->aid, ':type_name'=>$artistMusic->type_name))){
+                }
+                else if($artistMusic->save()){
+                }
+                
+            }
+            //when done
+            $this->redirect(array('site/index'));
+        }
+        $this->render('index', array(
+            'types'=>$types,
+            'lists'=>$changedTypes));
     }
+    
     public function actionChooseUser($uid)
     {
-    }
-    public function actionChooseConcert($cid)
-    {
+        $userModel = User::model()->findByPk($uid);
+        $changedTypes = $artistModel->musictypes;
+        $userMusic = new UserMusictype();
+        $types = Musictype::model()->findAll();
+        if(isset($_POST['UserMusicTypes']))
+        {
+            $changedTypes = $_POST['UserMusicTypes'];
+            foreach ($_POST['UserMusicTypes'] as $i => $value) {
+                $userMusic->attributes=$value;
+                $userMusic->uid=$uid;
+                if(ArtistMusicType::model()->exits('uid=:uid and type_name=:type_name', array(':uid'=>$userMusic->uid, ':type_name'=>$userMusic->type_name))){
+                }
+                else if($userMusic->save()){
+                }
+                
+            }
+            //when done
+            $this->redirect(array('site/index'));
+        }
+        $this->render('choose_type', array(
+                                     'types'=>$types,
+                                     'lists'=>$changedTypes));
     }
     
     public function actionCreate()

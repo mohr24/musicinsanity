@@ -47,11 +47,6 @@ if(Yii::app()->user->id != $model->aid){
 	),
 )); ?>
 <br/>
-<h1>Music Styles</h1>
-<?php foreach($model->musictypes as $type){
-    echo $type->type_name."\n";
-}?>
-<br/>
 <h1><?php if($model->aid == Yii::app()->user->id) {echo "Your";} else{echo $model->aname."'s";} ?> Upcoming Concerts</h1>
 <?php $this->widget('zii.widgets.CListView',array(
 

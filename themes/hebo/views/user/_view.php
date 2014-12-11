@@ -38,7 +38,7 @@
         //echo "Key: $i; Value: $value['label']<br />\n";
         if ($i < 3){
         //echo "<li><a href=/musicinsanity/index.php/list/" . $value['lid'] . ">" . $value['lname'] . "</a></li>";
-            echo "<li>" . $value . "</li>";
+            echo "<li>" . $value->type_name . "</li>";
         }
     }
     }
