@@ -9,7 +9,7 @@ $this->breadcrumbs=array(
 
 if($is_artist){
     $editConcert = array('label'=>'Edit this concert', 'url'=>array('update?id='.$model->cid));
-    $editMusicType = array('label'=>'Edit concert musictype', 'url'=>array('/musictype/chooseConcert?cid='.$model->cid));
+    $editMusicType = array('label'=>'Edit concert musictype', 'url'=>array('/musicinsanity/index.php/musictype/chooseConcert?cid='.$model->cid));
 }
 else if($attending){
     $attendLink = array('label'=>'Don\'t attend this concert', 'url'=>array('unattend?id='.$model->cid.'&return=page'));
