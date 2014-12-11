@@ -20,7 +20,13 @@ $this->menu=array(
         }
     }?>Concerts</h1>
 
-<?php $this->widget('zii.widgets.CListView', array(
+<?php
+if($artist){
+    $itemView = '_view_artists';
+}else{
+    $itemView = '_view_with_names';
+}
+$this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProviderConcerts,
-	'itemView'=>'_view_with_names',
+	'itemView'=>$itemView,
 )); ?>

@@ -81,6 +81,33 @@ class SiteController extends Controller
                 'keyField'=>'cid',
 
             ));
+            $recommendedConcerts = Yii::app()->db->createCommand()
+                ->select('distinct(c.cid),c.*,a.aname, a.aid,v.vname, v.city, u2.uid as recommender_id, u2.uname as recommender_name')
+                ->from('concert c, artist a, venue v, user_follow uf, user u2, list l, concert_list cl')
+                ->where('uf.uid = :uid and uf.fuid = u2.uid and u2.uid = l.uid and l.lid = cl.lid and c.cid = cl.cid and c.aid = a.aid
+                    and c.vid = v.vid and c.cdate >= CURRENT_DATE()',
+                    array(':uid'=>$user_id,))
+                ->queryAll();
+            foreach($recommendedConcerts as $i=>$concert){
+                $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>$user_id,':cid'=>$concert['cid']));
+                if($userConcert){
+                    $recommendedConcerts[$i]['attending']="Yes";
+                }else{
+                    $recommendedConcerts[$i]['attending']="No";
+                }
+            }
+            $dataProviderRecommendedConcerts = new CArrayDataProvider($recommendedConcerts, array(
+                'keyField'=>'cid',
+                //   'id'=>'cid',
+                /* 'sort'=>array(
+                     'attributes'=>array(
+                         'id', 'username', 'email',
+                     ),
+                 ),*/
+                'pagination'=>array(
+                    'pageSize'=>10,
+                ),
+            ));
             $ArtistsYouMightLike = Artist::model()->findAllBySql('select a.*, count(u2.uid) from artist a, user u1, user u2, user_artist ua2
             where u1.uid = :uid and u2.uid in
             (select u22.uid from user_artist ua21, user_artist ua22, user u22
@@ -92,10 +119,10 @@ class SiteController extends Controller
             having count(u2.uid) > 1',array(':uid'=>$user_id));
             $dataProviderArtists = new CArrayDataProvider($ArtistsYouMightLike, array(
                 'keyField'=>'aid',
-
             ));
             $this->render('indexMichael',array(
                 'dataProviderConcerts'=>$dataProviderConcerts,
+                'dataProviderRecommendedConcerts'=>$dataProviderRecommendedConcerts,
                 'dataProviderReviews'=>$dataProviderReviews,
                 'dataProviderArtists'=>$dataProviderArtists,
             ));

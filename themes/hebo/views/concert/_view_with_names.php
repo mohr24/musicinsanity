@@ -60,14 +60,18 @@
 <?php echo CHtml::encode($data['cdescription']); ?>
 </p>
 <?php
-    if(isset($data['submitted_by_uid'])){
+if(isset($data['submitted_by_uid'])){
     $criteria=new CDbCriteria;
     $criteria->select='uname';
     $criteria->condition="uid=:uid";
     $criteria->params=array(':uid'=>$data['submitted_by_uid']);
     $record=User::model()->find($criteria);
-    echo "<i style='float:right; color:#FF0000'>".CHtml::encode("Recommended By User").': '.
+    echo "<i style='float:right; color:#FF0000'>".CHtml::encode("Submitted By User").': '.
     CHtml::encode($record->uname)."</i><br/>";
+}
+if(isset($data['recommender_name'])){
+    echo "<i style='float:right; color:#FF0000'>". CHtml::encode('From '.$data['recommender_name']."'s list")
+       ."</i><br/>";
 }?>
 
 </div>
