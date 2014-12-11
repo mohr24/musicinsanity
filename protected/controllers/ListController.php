@@ -53,7 +53,7 @@ class ListController extends Controller
 	{
         $listModel = $this->loadModel($id);
         $concertinfo = Yii::app()->db->createCommand()
-            ->select('c.cid,c.cdate, c.cname, c.clink,c.cdescription, a.aid ,a.aname,v.vname, v.city')
+            ->select('c.*, a.aid ,a.aname,v.vname, v.city')
             ->from('concert c, artist a, venue v, concert_list cl')
             ->where('cl.lid = :lid and cl.cid = c.cid and c.aid = a.aid and c.vid = v.vid',
                 array(':lid'=>$id ))
@@ -194,17 +194,9 @@ class ListController extends Controller
             $concertList->attributes=$_POST['ConcertList'];
             $concertList->cid=$cid;
             if(ConcertList::model()->exists('lid = :lid and cid = :cid',array(':lid'=>$concertList->lid,':cid'=>$concertList->cid))){
-                if($return == "home") {
-                    $this->redirect(array('site/index'));
-                }else if($return == "page"){
-                    $this->actionView($concertList->lid);
-                }
+                $this->reload();
             }else if($concertList->save()){
-                if($return == "home") {
-                    $this->redirect(array('site/index'));
-                }else if($return == "page"){
-                    $this->actionView($concertList->lid);
-                }
+                $this->redirect(array('//'.$return));
             }else{
                 print_r($concertList->getErrors());
             }
@@ -225,7 +217,7 @@ class ListController extends Controller
         }
         $concertList= ConcertList::model()->find('cid=:cid and lid=:lid',array(':cid'=>$cid,':lid'=>$lid));
         if($concertList->delete()){
-            $this->redirect(Yii::app()->getBaseUrl(true)."/index.php".$return);
+            $this->redirect(array($return));
         }else{
             echo $concertList->getErrors();
         }

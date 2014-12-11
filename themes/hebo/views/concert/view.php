@@ -7,15 +7,17 @@ $this->breadcrumbs=array(
 	$model->cid,
 );
 
-if($is_artist){
+if($is_your_concert){
     $editConcert = array('label'=>'Edit this concert', 'url'=>array('update?id='.$model->cid));
     $editMusicType = array('label'=>'Edit concert musictype', 'url'=>array('/musicinsanity/index.php/musictype/chooseConcert?cid='.$model->cid));
 }
-else if($attending){
-    $attendLink = array('label'=>'Don\'t attend this concert', 'url'=>array('unattend?id='.$model->cid.'&return=page'));
-}else{
+else if(!$artist){
+    if($attending){
+        $attendLink = array('label'=>'Don\'t attend this concert', 'url'=>array('unattend?id='.$model->cid.'&return=page'));
+    }else{
 
-    $attendLink = array('label'=>'Attend this concert', 'url'=>array('attend?id='.$model->cid.'&return=page'));
+        $attendLink = array('label'=>'Attend this concert', 'url'=>array('attend?id='.$model->cid.'&return=page'));
+    }
 }
 $this->menu=array();
 if($past){
@@ -71,10 +73,17 @@ $this->menu=array(
 <?php
 if($past){
     echo '<h1>Reviews</h1>';
+    if($artist){
+        $itemView = '//concert/_review_artists';
+    }
+    else{
+        $itemView = '//concert/_review_with_names';
+
+    }
     $this->widget('zii.widgets.CListView',array(
 
         'dataProvider'=>$dataProviderReviews,
-        'itemView'=>'//concert/_review_with_names',
+        'itemView'=>$itemView,
 
     ));
 } ?>

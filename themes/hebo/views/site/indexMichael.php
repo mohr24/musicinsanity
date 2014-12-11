@@ -30,6 +30,13 @@ $this->pageTitle=Yii::app()->name;
 )); ?>
 <h5 style='float:right'><a href="/musicinsanity/index.php/concert/index?future=false"> View All Recent Concerts</a></h5>
 <br/>
+<h1>Concerts Recommended by your followers</h1>
+<?php $this->widget('zii.widgets.CListView',array(
+
+    'dataProvider'=>$dataProviderRecommendedConcerts,
+    'itemView'=>'//concert/_view_with_names',
+
+)); ?>
 <h1>Artists You Might Like</h1>
 <?php $this->widget('zii.widgets.CListView',array(
 

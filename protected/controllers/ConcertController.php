@@ -53,10 +53,12 @@ class ConcertController extends Controller
 	{
         $concertModel = $this->loadModel($id);
         if(Yii::app()->user->artist){
-            $is_artist = (Yii::app()->user->getId() == $concertModel->aid);
+            $is_your_concert = (Yii::app()->user->getId() == $concertModel->aid);
+            $is_artist = true;
         }
         else{
-            $is_artist=false;
+            $is_your_concert=false;
+            $is_artist = false;
         }
         $past = Concert::model()->exists('cid = :cid and cdate < CURRENT_DATE()',array(':cid'=>$id));
         $reviews = Yii::app()->db->createCommand()
@@ -82,7 +84,8 @@ class ConcertController extends Controller
         $this->render('view',array(
 			'model'=>$concertModel,
             'dataProviderReviews'=>$dataProviderReviews,
-            'is_artist'=>$is_artist,
+            'is_your_concert'=>$is_your_concert,
+            'artist'=>$is_artist,
             'attending'=>$attending,
             'past' =>$past,
 		));
@@ -182,10 +185,10 @@ class ConcertController extends Controller
             $pastConcerts = Yii::app()->db->createCommand()
                 // ->select('co.course_name, cl.section_id')
                 ->select('c.*,a.aname, a.aid,v.vname, v.city')
-                ->from('concert c, artist a, venue v, user_artist ua')
-                ->where('ua.uid = :uid and ua.aid = a.aid and c.aid = a.aid and c.vid = v.vid and
-              (c.cdate between (CURRENT_DATE() - interval 14 day) and CURRENT_DATE()) ',
-                    array(':uid'=>$user_id,))
+                ->from('concert c, artist a, venue v')
+                ->where('c.aid = a.aid and c.vid = v.vid and
+                    c.cdate < CURRENT_DATE()')
+                ->order('c.cdate DESC')
                 ->queryAll();
             //add attending column
             foreach($pastConcerts as $i=>$concert){
@@ -209,17 +212,15 @@ class ConcertController extends Controller
                  ),*/
             ));
 
-            $this->render('index',array(
-                'dataProviderConcerts'=>$dataProviderConcerts,
-            ));
+
         }else{
             $upcomingConcerts = Yii::app()->db->createCommand()
                 // ->select('co.course_name, cl.section_id')
                 ->select('c.*,a.aname, a.aid,v.vname, v.city')
-                ->from('concert c, artist a, venue v, user_artist ua')
-                ->where('ua.uid = :uid and ua.aid = a.aid and c.aid = a.aid and c.vid = v.vid and
-              (c.cdate between CURRENT_DATE() and (CURRENT_DATE() + interval 14 day)) ',
-                    array(':uid'=>$user_id,))
+                ->from('concert c, artist a, venue v')
+                ->where('c.aid = a.aid and c.vid = v.vid and
+              c.cdate>=CURRENT_DATE()')
+                ->order('c.cdate ASC')
                 ->queryAll();
             //add attending column
             foreach($upcomingConcerts as $i=>$concert){
@@ -243,10 +244,11 @@ class ConcertController extends Controller
                  ),*/
             ));
 
-            $this->render('index',array(
-                'dataProviderConcerts'=>$dataProviderConcerts,
-            ));
         }
+        $this->render('index',array(
+            'dataProviderConcerts'=>$dataProviderConcerts,
+            'artist'=>Yii::app()->user->artist,
+        ));
     }
 
 
@@ -271,7 +273,7 @@ class ConcertController extends Controller
         $userConcert->uid = $currentUser;
         $userConcert->cid = $id;
         if($userConcert->save()){
-            $this->redirect(Yii::app()->getBaseUrl(true)."/index.php".$return);
+            $this->redirect(array($return));
         }
 
         else{
@@ -282,7 +284,7 @@ class ConcertController extends Controller
     public function actionUnattend($id,$return){
         $userConcert = UserConcert::model()->find('uid = :uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$id));
         if($userConcert->delete())
-            $this->redirect(Yii::app()->getBaseUrl(true)."/index.php".$return);
+            $this->redirect(array($return));
         else{
             print_r($userConcert->getErrors());
         }
@@ -305,7 +307,7 @@ class ConcertController extends Controller
             $userConcert->attributes=$_POST['UserConcert'];
             $userConcert->attend_tp = new CDbExpression('CURRENT_DATE()');
             if($userConcert->save())
-                $this->redirect(Yii::app()->getBaseUrl."/index.php".$return);
+                $this->redirect(array($return));
             else{
                 echo $userConcert->getErrors();
             }
