@@ -27,8 +27,16 @@ $this->menu=array(
 
 
 <?php if(isset($dataProvider)){
-    $this->widget('zii.widgets.CListView', array(
-        'dataProvider'=>$dataProvider,
-        'itemView'=>'//concert/_view_with_names',
-    ));
+    if($artist){
+        $this->widget('zii.widgets.CListView', array(
+            'dataProvider'=>$dataProvider,
+            'itemView'=>'//concert/_view_artists',
+        ));
+    }else{
+        $this->widget('zii.widgets.CListView', array(
+            'dataProvider'=>$dataProvider,
+            'itemView'=>'//concert/_view_with_names',
+        ));
+    }
+
 }?>

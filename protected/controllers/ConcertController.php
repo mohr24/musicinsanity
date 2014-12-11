@@ -271,12 +271,7 @@ class ConcertController extends Controller
         $userConcert->uid = $currentUser;
         $userConcert->cid = $id;
         if($userConcert->save()){
-            if($return == "home") {
-                $this->redirect(array('site/index'));
-            }else if($return == "page"){
-                $this->actionView($id);
-            }
-
+            $this->redirect(Yii::app()->getBaseUrl(true)."/index.php".$return);
         }
 
         else{
@@ -287,11 +282,7 @@ class ConcertController extends Controller
     public function actionUnattend($id,$return){
         $userConcert = UserConcert::model()->find('uid = :uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$id));
         if($userConcert->delete())
-            if($return == "home") {
-                $this->redirect(array('site/index'));
-            }else if($return == "page"){
-                $this->actionView($id);
-            }
+            $this->redirect(Yii::app()->getBaseUrl(true)."/index.php".$return);
         else{
             print_r($userConcert->getErrors());
         }
@@ -314,11 +305,10 @@ class ConcertController extends Controller
             $userConcert->attributes=$_POST['UserConcert'];
             $userConcert->attend_tp = new CDbExpression('CURRENT_DATE()');
             if($userConcert->save())
-                if($return == "home") {
-                    $this->redirect('//site/index');
-                }else if($return == "page"){
-                    $this->redirect('view/'.$id);
-                }
+                $this->redirect(Yii::app()->getBaseUrl."/index.php".$return);
+            else{
+                echo $userConcert->getErrors();
+            }
         }
 
         $this->render('review',array(

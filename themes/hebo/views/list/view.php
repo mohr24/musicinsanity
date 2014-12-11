@@ -18,6 +18,7 @@ $this->menu=array(
 
 <h1>List: <?php  echo $model->lname; ?></h1>
 
+<h3>Created by <?php  echo $model->user->uname; ?></h3>
 <?php $this->widget('zii.widgets.CListView',array(
 
     'dataProvider'=>$dataProviderConcerts,

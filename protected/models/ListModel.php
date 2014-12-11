@@ -47,7 +47,7 @@ class ListModel extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'u' => array(self::BELONGS_TO, 'User', 'uid'),
+			'user' => array(self::BELONGS_TO, 'User', 'uid'),
 			'recommendations' => array(self::HAS_MANY, 'Recommendation', 'lid'),
 		);
 	}

@@ -47,12 +47,20 @@ class SearchController extends Controller
             $type = Musictype::model()->find('type_name=:type',array(':type'=>$_GET['type']));
             $concertinfo = Yii::app()->db->createCommand()
                 // ->select('co.course_name, cl.section_id')
-                ->select('c.*, a.aid ,a.aname,v.vname,v.city')
+                ->select('c.*, a.aid ,a.aname,v.vname,v.city, ')
                 ->from('concert c, artist a, venue v, concert_musictype m')
                 ->where('m.type_name  = :type and m.cid = c.cid and c.aid = a.aid and c.vid = v.vid and
             (c.cdate between (CURRENT_DATE() + interval 30 day) and CURRENT_DATE())',
                     array(':type'=>$type->type_name ))
                 ->queryAll();
+            foreach($concertinfo as $i=>$concert){
+                $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$concert['cid']));
+                if($userConcert){
+                    $concertinfo[$i]['attending']="Yes";
+                }else{
+                    $concertinfo[$i]['attending']="No";
+                }
+            }
             if(sizeof($concertinfo)>0){
                 $dataProviderConcerts=new CArrayDataProvider($concertinfo, array(
                     'keyField'=>'cid',
@@ -175,7 +183,14 @@ class SearchController extends Controller
                 ->from('concert c, artist a, venue v')
                 ->where($where,$params)
                 ->queryAll();
-
+            foreach($concertinfo as $i=>$concert){
+                $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$concert['cid']));
+                if($userConcert){
+                    $concertinfo[$i]['attending']="Yes";
+                }else{
+                    $concertinfo[$i]['attending']="No";
+                }
+            }
             $dataProvider=new CArrayDataProvider($concertinfo, array(
                 'keyField'=>'cid',
                 'pagination'=>array(
@@ -185,6 +200,7 @@ class SearchController extends Controller
 
             $this->render('concerts',array(
                 'dataProvider'=>$dataProvider,
+                'artist'=>Yii::app()->user->artist,
             ));
         }
         else{

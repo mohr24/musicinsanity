@@ -32,7 +32,7 @@ class ListController extends Controller
 				'users'=>array('*'),
 			),*/
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','index','view', 'add'),
+				'actions'=>array('create','update','index','view', 'add', 'remove'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -219,34 +219,16 @@ class ListController extends Controller
     public function actionRemove($cid,$lid,$return){
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
-        $concertList= ConcertList::model()->find('cid=:cid and lid=:lid',array(':cid'=>$cid,':lid'=>$lid));
-
-        $lists = ListModel::model()->findAll('uid = :uid',array(':uid'=>Yii::app()->user->getId()));
-        if(isset($_POST['ConcertList']))
-        {
-            $concertList->attributes=$_POST['ConcertList'];
-            $concertList->cid=$cid;
-            if(ConcertList::model()->exists('lid = :lid and cid = :cid',array(':lid'=>$concertList->lid,':cid'=>$concertList->cid))){
-                if($return == "home") {
-                    $this->redirect(array('site/index'));
-                }else if($return == "page"){
-                    $this->actionView($concertList->lid);
-                }
-            }else if($concertList->save()){
-                if($return == "home") {
-                    $this->redirect(array('site/index'));
-                }else if($return == "page"){
-                    $this->actionView($concertList->lid);
-                }
-            }else{
-                print_r($concertList->getErrors());
-            }
+        $listModel = $this->loadModel($lid);
+        if($listModel->user->uid != Yii::app()->user->getId()){
+            $this->refresh();
         }
-
-        $this->render('choose_list',array(
-            'concertList'=>$concertList,
-            'lists'=>$lists,
-        ));
+        $concertList= ConcertList::model()->find('cid=:cid and lid=:lid',array(':cid'=>$cid,':lid'=>$lid));
+        if($concertList->delete()){
+            $this->redirect(Yii::app()->getBaseUrl(true)."/index.php".$return);
+        }else{
+            echo $concertList->getErrors();
+        }
     }
 	public function loadModel($id)
 	{

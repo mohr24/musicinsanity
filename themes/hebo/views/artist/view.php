@@ -59,8 +59,14 @@ if(Yii::app()->user->id != $model->aid){
     'itemView'=>'//concert/_view_with_names',
 
 )); ?>
-<h1><?php if($model->aid == Yii::app()->user->id) {echo "Your";} else{echo $model->aname."'s";} ?> Recent Concert Reviews</h1>
-<?php $this->widget('zii.widgets.CListView',array(
+<h1><?php if($model->aid == Yii::app()->user->id) {echo "Your";} else{echo CHtml::encode($model->aname."'s");} ?> Recent Concert Reviews</h1>
+<?php
+if($artist){
+    $itemView = '//concert/_review_artists';
+}else{
+    $itemView = '//concert/_review_with_names';
+}
+$this->widget('zii.widgets.CListView',array(
 
     'dataProvider'=>$dataProviderRecentReviews,
     /* 'columns'=>array( // this array should include the attributes you want to display
@@ -68,6 +74,6 @@ if(Yii::app()->user->id != $model->aid){
          'cdate',
          'vname',
      ),*/
-    'itemView'=>'//concert/_review_with_names',
+    'itemView'=>$itemView,
 
 )); ?>

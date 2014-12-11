@@ -30,7 +30,7 @@
     if(isset($data['artist'])){}
     else{
     if(isset($data['listing']) && $data['uid']==Yii::app()->user->getId()){
-        echo CHtml::button('Remove', array ('class'=>'btn btn-primary','style' => "margin-top: 20px; margin-left: 10px", 'submit'=>$this->createUrl('list/remove',array('cid'=>$data['cid'], 'lid'=>$data['lid'], 'return'=>"page"))));
+        echo CHtml::button('Remove', array ('class'=>'btn btn-primary','style' => "margin-top: 20px; margin-left: 10px", 'submit'=>$this->createUrl('list/remove',array('cid'=>$data['cid'], 'lid'=>$data['lid'], 'return'=>"/list/".$data['lid']))));
     }
     else{
         echo CHtml::button('Add to List', array ('class'=>'btn btn-primary','style' => "margin-top: 20px; margin-left: 10px", 'submit'=>$this->createUrl('list/add',array('cid'=>$data['cid'], 'return'=>"home"))));

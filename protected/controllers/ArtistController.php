@@ -96,6 +96,7 @@ class ArtistController extends Controller
             'dataProviderUpcomingConcerts'=>$dataProviderUpcomingConcerts,
             'dataProviderRecentReviews'=>$dataProviderRecentReviews,
             'follows'=>$follows,
+            'artist'=>Yii::app()->user->artist,
 		));
 	}
 
