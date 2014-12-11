@@ -84,7 +84,7 @@ if(isset($data['recommender_name'])){
 
     <?php if(isset($data['rate'])){
         echo '<b>'.CHtml::encode("Rating").': </b>'.
-            CHtml::encode($data['rate']).
+            CHtml::encode($data['r ate']).
             '<br/>';
     }?>
 
