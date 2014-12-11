@@ -21,19 +21,19 @@
     //echo $data['cid'];
     if(isset($data['attending'])){
     if(strcmp ( $data['attending'], "No" )){
-        echo CHtml::button('Unattend', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('concert/unattend',array('id'=>$data['cid'], 'return'=>"home"))));
+        echo CHtml::button('Unattend', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('concert/unattend',array('id'=>$data['cid'], 'return'=>Yii::app()->request->url))));
     }
     else {
-        echo CHtml::button('Attend', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('concert/attend',array('id'=>$data['cid'], 'return'=>"home"))));
+        echo CHtml::button('Attend', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('concert/attend',array('id'=>$data['cid'], 'return'=>Yii::app()->request->url))));
     }
     }
     if(isset($data['artist'])){}
     else{
     if(isset($data['listing']) && $data['uid']==Yii::app()->user->getId()){
-        echo CHtml::button('Remove', array ('class'=>'btn btn-primary','style' => "margin-top: 20px; margin-left: 10px", 'submit'=>$this->createUrl('list/remove',array('cid'=>$data['cid'], 'lid'=>$data['lid'], 'return'=>"/list/".$data['lid']))));
+        echo CHtml::button('Remove', array ('class'=>'btn btn-primary','style' => "margin-top: 20px; margin-left: 10px", 'submit'=>$this->createUrl('list/remove',array('cid'=>$data['cid'], 'lid'=>$data['lid'], 'return'=>Yii::app()->request->url))));
     }
     else{
-        echo CHtml::button('Add to List', array ('class'=>'btn btn-primary','style' => "margin-top: 20px; margin-left: 10px", 'submit'=>$this->createUrl('list/add',array('cid'=>$data['cid'], 'return'=>"home"))));
+        echo CHtml::button('Add to List', array ('class'=>'btn btn-primary','style' => "margin-top: 20px; margin-left: 10px", 'submit'=>$this->createUrl('list/add',array('cid'=>$data['cid'], 'return'=>Yii::app()->request->url))));
     }
     }
     ?>

@@ -23,7 +23,7 @@
     //echo $data['cid'];
     if(isset($data['reviewed'])){
         if(strcmp ( $data['reviewed'], "No" )){
-            echo CHtml::button('Add My Review', array ('class'=>'btn btn-primary','style' => "margin-top: 20px;", 'submit'=>$this->createUrl('concert/review',array('id'=>$data['cid'], 'return'=>"home"))));
+            echo CHtml::button('Add My Review', array ('class'=>'btn btn-primary','style' => "margin-top: 20px;", 'submit'=>$this->createUrl('concert/review',array('id'=>$data['cid'], 'return'=>Yii::app()->request->url))));
         }
         else {
         }

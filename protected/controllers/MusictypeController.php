@@ -96,24 +96,25 @@ class MusictypeController extends Controller
     {
         $artistModel = Artist::model()->findByPk($aid);
         $lists = $artistModel->musictypes;
-        $artistMusic = new ArtistMusictype();
         $types = Musictype::model()->findAll();
-        if(isset($_POST['MusicTypes']))
+        if(isset($_POST['Musictype']))
         {
-            $changedTypes = $_POST['MusicTypes'];
+            $changedTypes = $_POST['Musictype'];
             ArtistMusictype::model()->deleteAll(array("condition"=>"aid='$aid'"));
-            
             foreach ($changedTypes as $i => $value) {
-                $artistMusic->type_name=$value['type_name'];
-                $artistMusic->aid=$aid;
-                if(ArtistMusictype::model()->exists('aid=:aid and type_name=:type_name', array(':aid'=>$artistMusic->aid, ':type_name'=>$artistMusic->type_name))){
+                //echo $value['type_name'];
+                $a = new ArtistMusictype();
+                $a->type_name=$value['type_name'];
+                $a->aid=$aid;
+                if($a->type_name != "No"/*UserMusictype::model()->exists('uid=:uid and type_name=:type_name', array(':uid'=>$userMusic->uid, ':type_name'=>$userMusic->type_name))*/){
+                    if(!$a->save()){
+                        print_r($a->getErrors());
+                    }
+                    
                 }
-                else if($artistMusic->save()){
-                }
-                
             }
             //when done
-            $this->redirect(array('site/index'));
+            $this->redirect(array('artist/'.$aid));
         }
         else {
             $this->render('choose_type', array(
@@ -132,42 +133,49 @@ class MusictypeController extends Controller
             $changedTypes = $_POST['Musictype'];
             UserMusictype::model()->deleteAll(array("condition"=>"uid='$uid'"));
             foreach ($changedTypes as $i => $value) {
-                echo $value['type_name'];
-                $i = new UserMusictype();
-                $i->type_name=$value['type_name'];
-                $i->uid=$uid;
-                if($i->type_name != "No"/*UserMusictype::model()->exists('uid=:uid and type_name=:type_name', array(':uid'=>$userMusic->uid, ':type_name'=>$userMusic->type_name))*/){
-
+                //echo $value['type_name'];
+                $a = new UserMusictype();
+                $a->type_name=$value['type_name'];
+                $a->uid=$uid;
+                if($a->type_name != "No"/*UserMusictype::model()->exists('uid=:uid and type_name=:type_name', array(':uid'=>$userMusic->uid, ':type_name'=>$userMusic->type_name))*/){
+                    if(!$a->save()){
+                        print_r($a->getErrors());
+                    }
+                    
                 }
                 
             }
             //when done
-            //$this->redirect(array('site/index'));
+            $this->redirect(array('user/'.$uid));
         }
         $this->render('choose_type', array(
                                      'types'=>$types,
                                            'lists'=>$lists));
     }
     
-    public function actionChooseConcert(){
-        $concertModel = Concert::model()->findByPk($uid);
+    public function actionChooseConcert($cid){
+        $concertModel = Concert::model()->findByPk($cid);
         $lists = $concertModel->musictypes;
-        $concertMusic = new ConcertMusictype();
         $types = Musictype::model()->findAll();
-        if(isset($_POST['UserMusictype']))
+        if(isset($_POST['Musictype']))
         {
-            $changedTypes = $_POST['UserMusictype'];
-            foreach ($_POST['UserMusictype'] as $i => $value) {
-                $userMusic->attributes=$value;
-                $userMusic->uid=$uid;
-                if(ArtistMusicType::model()->exits('uid=:uid and type_name=:type_name', array(':uid'=>$userMusic->uid, ':type_name'=>$userMusic->type_name))){
-                }
-                else if($userMusic->save()){
+            $changedTypes = $_POST['Musictype'];
+            ConcertMusictype::model()->deleteAll(array("condition"=>"cid='$cid'"));
+            foreach ($changedTypes as $i => $value) {
+                //echo $value['type_name'];
+                $a = new ConcertMusictype();
+                $a->type_name=$value['type_name'];
+                $a->cid=$cid;
+                if($a->type_name != "No"/*UserMusictype::model()->exists('uid=:uid and type_name=:type_name', array(':uid'=>$userMusic->uid, ':type_name'=>$userMusic->type_name))*/){
+                    if(!$a->save()){
+                        print_r($a->getErrors());
+                    }
+                    
                 }
                 
             }
             //when done
-            $this->redirect(array('site/index'));
+            $this->redirect(array('concert/'.$cid));
         }
         $this->render('choose_type', array(
                                            'types'=>$types,
