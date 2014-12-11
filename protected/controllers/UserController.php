@@ -191,8 +191,14 @@ class UserController extends Controller
 			$model->attributes=$_POST['User'];
             $model->reputation=0;
             $model->last_login_tp= new CDbExpression('CURRENT_DATE()');
-			if($model->save())
-				$this->redirect(array('//site/login'));
+			if($model->save()) {
+
+                $this->redirect(array('//site/login'));
+            }
+            else{
+                print_r($model->getErrors());
+            }
+
 		}
 
 		$this->render('//user/create',array(

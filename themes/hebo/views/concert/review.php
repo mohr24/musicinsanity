@@ -10,6 +10,6 @@ $this->menu=array(
 );
 ?>
 
-    <h1>Review Concert <?php echo $model->cid; ?></h1>
+    <h1>Review <?php echo "'".$cname."'"; ?></h1>
 
 <?php $this->renderPartial('_form_review', array('model'=>$model)); ?>

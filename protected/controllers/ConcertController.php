@@ -53,17 +53,38 @@ class ConcertController extends Controller
 	{
         $concertModel = $this->loadModel($id);
         if(Yii::app()->user->artist){
-            $is_artist = (Yii::app()->user->aid == $concertModel->aid);
+            $is_artist = (Yii::app()->user->getId() == $concertModel->aid);
         }
         else{
             $is_artist=false;
         }
+        $past = Concert::model()->exists('cid = :cid and cdate < CURRENT_DATE()',array(':cid'=>$id));
+        $reviews = Yii::app()->db->createCommand()
+            // ->select('co.course_name, cl.section_id')
+            ->select('c.*,a.aname, a.aid,v.vname, v.city, u.uid,u.uname, uc.review, uc.rate')
+            ->from('concert c, artist a, venue v, user_concert uc, user u')
+            ->where('c.cid = :cid and u.uid = uc.uid and uc.cid = c.cid and c.aid = a.aid and c.vid = v.vid and uc.review is not NULL and uc.rate is not NULL' ,
+                array(':cid'=>$id,))
+            ->queryAll();
+        foreach($reviews as $i=>$concert){
+            $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$concert['cid']));
+            if(isset($userConcert->review)|| isset($userConcert->rate)){
+                $recentReviews[$i]['reviewed']="Yes";
+            }else{
+                $recentReviews[$i]['reviewed']="No";
+            }
+        }
+        $dataProviderReviews = new CArrayDataProvider($reviews, array(
+            'keyField'=>'cid',
+        ));
         $attending = UserConcert::model()->exists('uid = :uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$concertModel->cid));
-		$this->render('view',array(
+
+        $this->render('view',array(
 			'model'=>$concertModel,
+            'dataProviderReviews'=>$dataProviderReviews,
             'is_artist'=>$is_artist,
             'attending'=>$attending,
-            'past' =>(new CDbExpression('CURRENT_DATE()>:date',array(':date'=>$concertModel->cdate))),
+            'past' =>$past,
 		));
 	}
 
@@ -276,9 +297,20 @@ class ConcertController extends Controller
         }
     }
     public function actionReview($id,$return){
+        $concert = Concert::model()->find('cid = :cid and cdate <= CURRENT_DATE()',array(':cid'=>$id));
+        if(!$concert){
+            $this->actionView($id);
+        }
         $userConcert = UserConcert::model()->find('uid = :uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$id));
+        if(!$userConcert){
+            $userConcert=new UserConcert();
+            $userConcert->uid= Yii::app()->user->getId();
+            $userConcert->cid = $id;
+        }
+
         if(isset($_POST['UserConcert']))
         {
+
             $userConcert->attributes=$_POST['UserConcert'];
             $userConcert->attend_tp = new CDbExpression('CURRENT_DATE()');
             if($userConcert->save())
@@ -290,6 +322,7 @@ class ConcertController extends Controller
         }
 
         $this->render('review',array(
+            'cname'=>$concert->cname,
             'model'=>$userConcert,
         ));
     }

@@ -121,7 +121,7 @@ class MusictypeController extends Controller
     public function actionChooseUser($uid)
     {
         $userModel = User::model()->findByPk($uid);
-        $changedTypes = $artistModel->musictypes;
+        $changedTypes = $userModel->musictypes;
         $userMusic = new UserMusictype();
         $types = Musictype::model()->findAll();
         if(isset($_POST['UserMusicTypes']))

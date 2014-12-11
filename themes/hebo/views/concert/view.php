@@ -58,7 +58,23 @@ $this->menu=array(
         array ( 'label'=>'Availability', 'value'=>$a ),
 		array ( 'label'=>'Website', 'value'=>$model->clink ),
 		array ( 'label'=>'About Concert', 'value'=>$model->cdescription ),
+        array ( 'label'=>$past ? 'Attended?' : 'Attending?','value'=>$attending ? 'Yes' : 'No'),
         array ( 'label'=>'Concert Music Type', 'type'=>'text', 'value'=>implode(", ", $types)),
 		//'concert_tp',
 	),
 )); ?>
+<br/>
+
+<?php
+if($past){
+    echo '<h1>Reviews</h1>';
+    $this->widget('zii.widgets.CListView',array(
+
+        'dataProvider'=>$dataProviderReviews,
+        'itemView'=>'//concert/_review_with_names',
+
+    ));
+} ?>
+<h5 style='float:right'><a href="/musicinsanity/index.php/concert/index?future=false"> View All Recent Concerts</a></h5>
+<br/>
+
