@@ -61,7 +61,7 @@ class ListController extends Controller
         foreach($concertinfo as $i=>$concert){
             $concertinfo[$i]['lid'] = $id;
             $concertinfo[$i]['listing'] = "Yes";
-            $concertinfo[$i]['uid'] = $$listModel->uid;
+            $concertinfo[$i]['uid'] = $listModel->uid;
             $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$concert['cid']));
             if($userConcert){
                 $concertinfo[$i]['attending']="Yes";
@@ -216,10 +216,11 @@ class ListController extends Controller
         ));
     }
 
-    public function actionRemove($cid,$return){
+    public function actionRemove($cid,$lid,$return){
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
-        $concertList=
+        $concertList= ConcertList::model()->find('cid=:cid and lid=:lid',array(':cid'=>$cid,':lid'=>$lid));
+
         $lists = ListModel::model()->findAll('uid = :uid',array(':uid'=>Yii::app()->user->getId()));
         if(isset($_POST['ConcertList']))
         {
