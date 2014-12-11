@@ -196,7 +196,7 @@ class ListController extends Controller
             if(ConcertList::model()->exists('lid = :lid and cid = :cid',array(':lid'=>$concertList->lid,':cid'=>$concertList->cid))){
                 $this->reload();
             }else if($concertList->save()){
-                $this->redirect(array('//'.$return));
+                $this->redirect(Yii::app()->baseUrl.$return);
             }else{
                 print_r($concertList->getErrors());
             }
@@ -217,7 +217,7 @@ class ListController extends Controller
         }
         $concertList= ConcertList::model()->find('cid=:cid and lid=:lid',array(':cid'=>$cid,':lid'=>$lid));
         if($concertList->delete()){
-            $this->redirect(array($return));
+            $this->redirect(Yii::app()->baseUrl.$return);
         }else{
             echo $concertList->getErrors();
         }

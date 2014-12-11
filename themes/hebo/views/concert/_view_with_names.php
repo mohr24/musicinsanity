@@ -21,10 +21,10 @@
     //echo $data['cid'];
     if(isset($data['attending'])){
     if(strcmp ( $data['attending'], "No" )){
-        echo CHtml::button('Unattend', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('concert/unattend',array('id'=>$data['cid'], 'return'=>Yii::app()->request->url))));
+        echo CHtml::button('Unattend', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('concert/unattend',array('id'=>$data['cid'], 'return'=>substr(Yii::app()->request->url, strlen(Yii::app()->baseUrl))))));
     }
     else {
-        echo CHtml::button('Attend', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('concert/attend',array('id'=>$data['cid'], 'return'=>Yii::app()->request->url))));
+        echo CHtml::button('Attend', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('concert/attend',array('id'=>$data['cid'], 'return'=>substr(Yii::app()->request->url, strlen(Yii::app()->baseUrl))))));
     }
     }
     if(isset($data['artist'])){}
@@ -84,7 +84,7 @@ if(isset($data['recommender_name'])){
 
     <?php if(isset($data['rate'])){
         echo '<b>'.CHtml::encode("Rating").': </b>'.
-            CHtml::encode($data['r ate']).
+            CHtml::encode($data['rate']).
             '<br/>';
     }?>
 

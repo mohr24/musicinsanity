@@ -13,15 +13,15 @@ if($is_your_concert){
 }
 else if(!$artist){
     if($attending){
-        $attendLink = array('label'=>'Don\'t attend this concert', 'url'=>array('unattend?id='.$model->cid.'&return=page'));
+        $attendLink = array('label'=>'Don\'t attend this concert', 'url'=>array('unattend?id='.$model->cid.'&return='.substr(Yii::app()->request->url, strlen(Yii::app()->baseUrl))));
     }else{
 
-        $attendLink = array('label'=>'Attend this concert', 'url'=>array('attend?id='.$model->cid.'&return=page'));
+        $attendLink = array('label'=>'Attend this concert', 'url'=>array('attend?id='.$model->cid.'&return='.substr(Yii::app()->request->url, strlen(Yii::app()->baseUrl))));
     }
 }
 $this->menu=array();
 if($past){
-    $this->menu[] = array('label'=>'Review this concert', 'url'=>array('review?id='.$model->cid.'&return=page'));;
+    $this->menu[] = array('label'=>'Review this concert', 'url'=>array('review?id='.$model->cid.'&return='.substr(Yii::app()->request->url, strlen(Yii::app()->baseUrl))));;
 }
 if(isset($attendLink)){
     $this->menu[] = $attendLink;

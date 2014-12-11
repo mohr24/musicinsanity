@@ -273,7 +273,7 @@ class ConcertController extends Controller
         $userConcert->uid = $currentUser;
         $userConcert->cid = $id;
         if($userConcert->save()){
-            $this->redirect(array($return));
+            $this->redirect(Yii::app()->baseUrl.$return);
         }
 
         else{
@@ -284,7 +284,7 @@ class ConcertController extends Controller
     public function actionUnattend($id,$return){
         $userConcert = UserConcert::model()->find('uid = :uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$id));
         if($userConcert->delete())
-            $this->redirect(array($return));
+            $this->redirect(Yii::app()->baseUrl.$return);
         else{
             print_r($userConcert->getErrors());
         }
@@ -307,7 +307,7 @@ class ConcertController extends Controller
             $userConcert->attributes=$_POST['UserConcert'];
             $userConcert->attend_tp = new CDbExpression('CURRENT_DATE()');
             if($userConcert->save())
-                $this->redirect(array($return));
+                $this->redirect(Yii::app()->baseUrl.$return);
             else{
                 echo $userConcert->getErrors();
             }
