@@ -25,11 +25,6 @@
 <?php echo CHtml::encode($data['vname']); ?>    <b><?php echo CHtml::encode('In'); ?></b>
 <?php echo CHtml::encode($data['city']); ?>
 <br/>
-<?php if($data['clink'] != null){
-    echo '<b>'.CHtml::encode("Buy Tick Here").': </b>'.
-    CHtml::link(CHtml::encode($data['clink']), CHtml::encode($data['clink']));
-}?>
-<br/>
 <?php echo CHtml::encode($data['cdescription']); ?>
 </p>
 <?php if(isset($data['attending'])){
@@ -39,22 +34,4 @@
 }?>
 
 </div>
-
-    <?php if(isset($data['uname'])){
-        echo '<b>'.CHtml::encode("Name").': </b>'.
-            CHtml::link(CHtml::encode($data['uname']), array('//user/view', 'id'=>$data['uid'])).
-            '<br/>';
-    }?>
-
-    <?php if(isset($data['rate'])){
-        echo '<b>'.CHtml::encode("Rating").': </b>'.
-            CHtml::encode($data['rate']).
-            '<br/>';
-    }?>
-
-    <?php if(isset($data['review'])){
-        echo '<b>'.CHtml::encode("Review").': </b>'.
-            CHtml::encode($data['review']).
-            '<br/>';
-    }?>
 </div>

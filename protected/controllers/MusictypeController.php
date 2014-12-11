@@ -95,16 +95,18 @@ class MusictypeController extends Controller
     public function actionChooseArtist($aid)
     {
         $artistModel = Artist::model()->findByPk($aid);
-        $changedTypes = $artistModel->musictypes;
+        $lists = $artistModel->musictypes;
         $artistMusic = new ArtistMusictype();
         $types = Musictype::model()->findAll();
-        if(isset($_POST['ArtistMusicTypes']))
+        if(isset($_POST['MusicTypes']))
         {
-            $changedTypes = $_POST['ArtistMusicTypes'];
-            foreach ($_POST['ArtistMusicTypes'] as $i => $value) {
-                $artistMusic->attributes=$value;
+            $changedTypes = $_POST['MusicTypes'];
+            ArtistMusictype::model()->deleteAll(array("condition"=>"aid='$aid'"));
+            
+            foreach ($changedTypes as $i => $value) {
+                $artistMusic->type_name=$value['type_name'];
                 $artistMusic->aid=$aid;
-                if(ArtistMusicType::model()->exits('aid=:aid and type_name=:type_name', array(':aid'=>$artistMusic->aid, ':type_name'=>$artistMusic->type_name))){
+                if(ArtistMusictype::model()->exists('aid=:aid and type_name=:type_name', array(':aid'=>$artistMusic->aid, ':type_name'=>$artistMusic->type_name))){
                 }
                 else if($artistMusic->save()){
                 }
@@ -113,21 +115,49 @@ class MusictypeController extends Controller
             //when done
             $this->redirect(array('site/index'));
         }
-        $this->render('index', array(
-            'types'=>$types,
-            'lists'=>$changedTypes));
+        else {
+            $this->render('choose_type', array(
+                                               'types'=>$types,
+                                               'lists'=>$lists));
+        }
     }
     
     public function actionChooseUser($uid)
     {
         $userModel = User::model()->findByPk($uid);
-        $changedTypes = $userModel->musictypes;
-        $userMusic = new UserMusictype();
+        $lists = $userModel->musictypes;
         $types = Musictype::model()->findAll();
-        if(isset($_POST['UserMusicTypes']))
+        if(isset($_POST['Musictype']))
         {
-            $changedTypes = $_POST['UserMusicTypes'];
-            foreach ($_POST['UserMusicTypes'] as $i => $value) {
+            $changedTypes = $_POST['Musictype'];
+            UserMusictype::model()->deleteAll(array("condition"=>"uid='$uid'"));
+            foreach ($changedTypes as $i => $value) {
+                echo $value['type_name'];
+                $i = new UserMusictype();
+                $i->type_name=$value['type_name'];
+                $i->uid=$uid;
+                if($i->type_name != "No"/*UserMusictype::model()->exists('uid=:uid and type_name=:type_name', array(':uid'=>$userMusic->uid, ':type_name'=>$userMusic->type_name))*/){
+
+                }
+                
+            }
+            //when done
+            //$this->redirect(array('site/index'));
+        }
+        $this->render('choose_type', array(
+                                     'types'=>$types,
+                                           'lists'=>$lists));
+    }
+    
+    public function actionChooseConcert(){
+        $concertModel = Concert::model()->findByPk($uid);
+        $lists = $concertModel->musictypes;
+        $concertMusic = new ConcertMusictype();
+        $types = Musictype::model()->findAll();
+        if(isset($_POST['UserMusictype']))
+        {
+            $changedTypes = $_POST['UserMusictype'];
+            foreach ($_POST['UserMusictype'] as $i => $value) {
                 $userMusic->attributes=$value;
                 $userMusic->uid=$uid;
                 if(ArtistMusicType::model()->exits('uid=:uid and type_name=:type_name', array(':uid'=>$userMusic->uid, ':type_name'=>$userMusic->type_name))){
@@ -140,8 +170,8 @@ class MusictypeController extends Controller
             $this->redirect(array('site/index'));
         }
         $this->render('choose_type', array(
-                                     'types'=>$types,
-                                     'lists'=>$changedTypes));
+                                           'types'=>$types,
+                                           'lists'=>$lists));
     }
     
     public function actionCreate()

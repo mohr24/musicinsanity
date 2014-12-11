@@ -19,6 +19,7 @@
         //echo "Key: $i; Value: $value['label']<br />\n";
       echo "<li><a href=" . $value['url'][0] . ">" . $value["label"] . "</a></li>";
     }
+    if(isset(Yii::app()->user->id)){
     if(isset(Yii::app()->user->artist) and Yii::app()->user->artist){
         echo "<li><a href=".Yii::app()->getBaseUrl(true) . "/index.php/concert/create?aid=". Yii::app()->user->aid . ">Create a concert</a></li>";
     }else{
@@ -30,6 +31,7 @@
     }else{
         echo "<li><a href=".Yii::app()->getBaseUrl(true) . "/index.php/user/". Yii::app()->user->getId() . ">View Your Profile</a></li>";
         
+    }
     }
     ?>
 
