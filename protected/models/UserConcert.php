@@ -57,7 +57,7 @@ class UserConcert extends CActiveRecord
 		return array(
 			'cid' => 'Cid',
 			'uid' => 'Uid',
-			'rate' => 'Rate',
+			'rate' => 'Rate (out of 10)',
 			'review' => 'Review',
 			'attend_tp' => 'Attend Tp',
 		);

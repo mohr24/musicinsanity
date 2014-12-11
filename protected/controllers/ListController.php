@@ -51,6 +51,7 @@ class ListController extends Controller
 	 */
 	public function actionView($id)
 	{
+        $listModel = $this->loadModel($id);
         $concertinfo = Yii::app()->db->createCommand()
             ->select('c.cid,c.cdate, c.cname, c.clink,c.cdescription, a.aid ,a.aname,v.vname, v.city')
             ->from('concert c, artist a, venue v, concert_list cl')
@@ -60,6 +61,7 @@ class ListController extends Controller
         foreach($concertinfo as $i=>$concert){
             $concertinfo[$i]['lid'] = $id;
             $concertinfo[$i]['listing'] = "Yes";
+            $concertinfo[$i]['uid'] = $$listModel->uid;
             $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$concert['cid']));
             if($userConcert){
                 $concertinfo[$i]['attending']="Yes";
@@ -186,6 +188,38 @@ class ListController extends Controller
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
         $concertList= new ConcertList();
+        $lists = ListModel::model()->findAll('uid = :uid',array(':uid'=>Yii::app()->user->getId()));
+        if(isset($_POST['ConcertList']))
+        {
+            $concertList->attributes=$_POST['ConcertList'];
+            $concertList->cid=$cid;
+            if(ConcertList::model()->exists('lid = :lid and cid = :cid',array(':lid'=>$concertList->lid,':cid'=>$concertList->cid))){
+                if($return == "home") {
+                    $this->redirect(array('site/index'));
+                }else if($return == "page"){
+                    $this->actionView($concertList->lid);
+                }
+            }else if($concertList->save()){
+                if($return == "home") {
+                    $this->redirect(array('site/index'));
+                }else if($return == "page"){
+                    $this->actionView($concertList->lid);
+                }
+            }else{
+                print_r($concertList->getErrors());
+            }
+        }
+
+        $this->render('choose_list',array(
+            'concertList'=>$concertList,
+            'lists'=>$lists,
+        ));
+    }
+
+    public function actionRemove($cid,$return){
+        // Uncomment the following line if AJAX validation is needed
+        // $this->performAjaxValidation($model);
+        $concertList=
         $lists = ListModel::model()->findAll('uid = :uid',array(':uid'=>Yii::app()->user->getId()));
         if(isset($_POST['ConcertList']))
         {

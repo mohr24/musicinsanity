@@ -16,7 +16,7 @@ $this->menu=array(
 );
 ?>
 
-<h1> <?php echo $model->lname; ?></h1>
+<h1>List: <?php  echo $model->lname; ?></h1>
 
 <?php $this->widget('zii.widgets.CListView',array(
 

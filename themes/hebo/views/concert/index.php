@@ -12,7 +12,13 @@ $this->menu=array(
 );
 ?>
 
-<h1><?php if(isset($_GET['future'])){if($_GET['future']){echo "Future ";}else{ echo "Recent ";}}?>Concerts</h1>
+<h1><?php if(isset($_GET['future'])){
+        if($_GET['future']=="true"){
+            echo "Future ";
+        }else{
+            echo "Recent ";
+        }
+    }?>Concerts</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProviderConcerts,
