@@ -19,10 +19,11 @@ $this->breadcrumbs=array(
 <?php foreach($types as $i=>$type): ?>
 <?php
     //echo $form->labelEx($type,$type->type_name);
+    echo "<div class='row'>";
     $check=false;
     foreach ($lists as $list) {
         if($list->type_name == $type->type_name){
-            echo CHtml::activeCheckBox($type,'type_name',array('value'=>$type['type_name'], 'name'=>'Musictype['.$i.'][type_name]', 'checked'=>true, 'uncheckValue'=>null, 'style'=>"margin-top: -3px; margin-right: 10px;"));
+            echo CHtml::activeCheckBox($type,'type_name',array('value'=>$type['type_name'], 'name'=>'Musictype['.$i.'][type_name]', 'checked'=>true, 'uncheckValue'=>"No", 'style'=>"margin-top: -3px; margin-right: 10px;"));
             echo CHtml::encode($type->type_name);
             echo "<br/>";
             $check=true;
@@ -30,11 +31,12 @@ $this->breadcrumbs=array(
         }
     }
     if($check == false){
-        echo CHtml::activeCheckBox($type,'type_name',array('value'=>$type['type_name'], 'name'=>'Musictype['.$i.'][type_name]', 'checked'=>false, 'uncheckValue'=>null,'style'=>"margin-top: -3px; margin-right: 10px;"));
+        echo CHtml::activeCheckBox($type,'type_name',array('value'=>$type['type_name'], 'name'=>'Musictype['.$i.'][type_name]', 'checked'=>false, 'uncheckValue'=>"No",'style'=>"margin-top: -3px; margin-right: 10px;"));
         echo CHtml::encode($type->type_name);
         echo "<br/>";
         $check=true;
     }
+    echo "</div>";
     ?>
 
 <?php endforeach; ?>

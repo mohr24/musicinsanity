@@ -2,6 +2,7 @@
 /* @var $this SiteController */
 
 $this->pageTitle=Yii::app()->name;
+$this->menu[]=array('label'=>'Edit the musicType', 'url'=>array('/musicinsanity/index.php/musictype/chooseArtist?aid='.Yii::app()->user->id));
     ?>
 <h1>Upcoming Concerts</h1>
 <?php $this->widget('zii.widgets.CListView',array(

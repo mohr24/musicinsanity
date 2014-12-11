@@ -126,23 +126,23 @@ class MusictypeController extends Controller
     {
         $userModel = User::model()->findByPk($uid);
         $lists = $userModel->musictypes;
-        $userMusic = new UserMusictype();
-        $userMusic->uid=$uid;
         $types = Musictype::model()->findAll();
         if(isset($_POST['Musictype']))
         {
             $changedTypes = $_POST['Musictype'];
-            //UserMusictype::model()->deleteAll(array("condition"=>"uid='$uid'"));
+            UserMusictype::model()->deleteAll(array("condition"=>"uid='$uid'"));
             foreach ($changedTypes as $i => $value) {
-                $userMusic->type_name=$value['type_name'];
-                if(UserMusictype::model()->exists('uid=:uid and type_name=:type_name', array(':uid'=>$userMusic->uid, ':type_name'=>$userMusic->type_name))){
-                }
-                else if($userMusic->save()){
+                echo $value['type_name'];
+                $i = new UserMusictype();
+                $i->type_name=$value['type_name'];
+                $i->uid=$uid;
+                if($i->type_name != "No"/*UserMusictype::model()->exists('uid=:uid and type_name=:type_name', array(':uid'=>$userMusic->uid, ':type_name'=>$userMusic->type_name))*/){
+
                 }
                 
             }
             //when done
-            $this->redirect(array('site/index'));
+            //$this->redirect(array('site/index'));
         }
         $this->render('choose_type', array(
                                      'types'=>$types,

@@ -46,10 +46,16 @@
 <?php echo CHtml::encode($data['vname']); ?>    <b><?php echo CHtml::encode('In'); ?></b>
 <?php echo CHtml::encode($data['city']); ?>
 <br/>
-<?php if($data['clink'] != null){
-    echo '<b>'.CHtml::encode("Buy Tick Here").': </b>'.
+<?php if($data['availability'] == 1){
+    echo '<b>'.CHtml::encode("You can Buy Ticket at price: $").'</b>'.CHtml::encode($data['price']);
+    echo '<br/>';
+    echo '<b>'.CHtml::encode("Ticket Link Here").': </b>'.
     CHtml::link(CHtml::encode($data['clink']), CHtml::encode($data['clink']));
-}?>
+}
+    else {
+        echo '<b>'.CHtml::encode("Ticket is not Available right now").': </b>';
+    }
+?>
 <br/>
 <?php echo CHtml::encode($data['cdescription']); ?>
 </p>

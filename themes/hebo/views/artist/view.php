@@ -24,6 +24,8 @@ if(Yii::app()->user->id != $model->aid){
                           );
     }
     else{
+        $this->menu=array(array('label'=>'Edit Your Profile', 'url'=>array('//user/update?id='.$model->aid)));
+
     }
 ?>
 

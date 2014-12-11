@@ -10,7 +10,7 @@ $this->pageTitle=Yii::app()->name;
         $this->menu=array(array('label'=>'View Your List', 'url'=>array('/musicinsanity/index.php/list/index')));
     }
     //DEBUG
-    $this->menu=array(array('label'=>'Edit the musicType', 'url'=>array('/musicinsanity/index.php/musictype/chooseUser?uid=1')));
+    $this->menu[]=array('label'=>'Edit the musicType', 'url'=>array('/musicinsanity/index.php/musictype/chooseUser?uid='.Yii::app()->user->id));
 ?>
 <h1>Upcoming Concerts</h1>
 <?php $this->widget('zii.widgets.CListView',array(
