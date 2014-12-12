@@ -11,7 +11,7 @@ if($is_your_concert){
     $editConcert = array('label'=>'Edit this concert', 'url'=>array('update?id='.$model->cid));
     $editMusicType = array('label'=>'Edit concert musictype', 'url'=>array('/musicinsanity/index.php/musictype/chooseConcert?cid='.$model->cid));
 }
-else if(!$artist){
+else if(!$artist && !$past){
     if($attending){
         $attendLink = array('label'=>'Don\'t attend this concert', 'url'=>array('unattend?id='.$model->cid.'&return='.substr(Yii::app()->request->url, strlen(Yii::app()->baseUrl))));
     }else{

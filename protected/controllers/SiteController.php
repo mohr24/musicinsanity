@@ -29,8 +29,12 @@ class SiteController extends Controller
 	public function actionIndex()
 	{
         $user_id = Yii::app()->user->getId();
-        
+
         if($user_id && !Yii::app()->user->artist){
+            $userModel = User::model()->find('uid = :uid',array(':uid'=>$user_id));
+            if(sizeof($userModel->musictypes)==0){
+                $this->redirect(Yii::app()->baseUrl."/index.php/musictype/chooseUser?uid=".$user_id);
+            }
             $this->layout = '//layouts/column2';
             $upcomingConcerts = Yii::app()->db->createCommand()
                 // ->select('co.course_name, cl.section_id')
@@ -96,18 +100,43 @@ class SiteController extends Controller
                     $recommendedConcerts[$i]['attending']="No";
                 }
             }
-            $dataProviderRecommendedConcerts = new CArrayDataProvider($recommendedConcerts, array(
-                'keyField'=>'cid',
-                //   'id'=>'cid',
-                /* 'sort'=>array(
-                     'attributes'=>array(
-                         'id', 'username', 'email',
-                     ),
-                 ),*/
-                'pagination'=>array(
-                    'pageSize'=>10,
-                ),
-            ));
+            $ConcertsInMusictype = Yii::app()->db->createCommand()
+                ->select('distinct(c.cid),c.*,a.aname, a.aid,v.vname, v.city')
+                ->from('concert c, artist a, venue v, concert_musictype cm, user_musictype um, musictype m')
+                ->where('um.uid = :uid and um.type_name = cm.type_name and cm.cid = c.cid and c.aid = a.aid
+                    and c.vid = v.vid and c.cdate >= CURRENT_DATE()',
+                    array(':uid'=>$user_id,))
+                ->queryAll();
+            foreach($ConcertsInMusictype as $i=>$concert){
+                $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>$user_id,':cid'=>$concert['cid']));
+                if($userConcert){
+                    $ConcertsInMusictype[$i]['attending']="Yes";
+                }else{
+                    $ConcertsInMusictype[$i]['attending']="No";
+                }
+            }
+            if(sizeof($recommendedConcerts)>0){
+                $dataProviderRecommendedConcerts = new CArrayDataProvider($recommendedConcerts, array(
+                    'keyField'=>'cid',
+                    'pagination'=>array(
+                        'pageSize'=>10,
+                    ),
+                ));
+            }else{
+                $dataProviderRecommendedConcerts = new CArrayDataProvider($ConcertsInMusictype, array(
+                    'keyField'=>'cid',
+                    'pagination'=>array(
+                        'pageSize'=>10,
+                    ),
+                ));
+            }
+
+            $ArtistsInYourMusicType = Artist::model()->findAllBySql('select a.*
+            from artist a,user u, musictype m, artist_musictype am, user_musictype um
+            where  a.aid=am.aid and am.type_name=um.type_name and um.uid = :uid
+            and a.aid not in (select ua31.aid from user_artist ua31 where ua31.uid = :uid)
+            group by a.aid',array(':uid'=>$user_id));
+
             $ArtistsYouMightLike = Artist::model()->findAllBySql('select a.*, count(u2.uid) from artist a, user u1, user u2, user_artist ua2
             where u1.uid = :uid and u2.uid in
             (select u22.uid from user_artist ua21, user_artist ua22, user u22
@@ -117,16 +146,28 @@ class SiteController extends Controller
             and a.aid not in (select ua31.aid from user_artist ua31 where ua31.uid = u1.uid)
             group by a.aid
             having count(u2.uid) > 1',array(':uid'=>$user_id));
-            $dataProviderArtists = new CArrayDataProvider($ArtistsYouMightLike, array(
-                'keyField'=>'aid',
-            ));
+            if(sizeof($ArtistsYouMightLike)>0){
+                $dataProviderArtists = new CArrayDataProvider($ArtistsYouMightLike, array(
+                    'keyField'=>'aid',
+                ));
+            }else{
+                $dataProviderArtists = new CArrayDataProvider($ArtistsInYourMusicType, array(
+                    'keyField'=>'aid',
+                ));
+            }
+
             $this->render('indexMichael',array(
                 'dataProviderConcerts'=>$dataProviderConcerts,
                 'dataProviderRecommendedConcerts'=>$dataProviderRecommendedConcerts,
                 'dataProviderReviews'=>$dataProviderReviews,
                 'dataProviderArtists'=>$dataProviderArtists,
+                'dataProviderArtistsMusicType'=>$dataProviderArtists,
             ));
         }else if($user_id && Yii::app()->user->artist){
+            $artistModel = Artist::model()->find('aid = :aid',array(':aid'=>$user_id));
+            if(sizeof($artistModel->musictypes)==0){
+                $this->redirect(Yii::app()->baseUrl."/index.php/musictype/chooseArtist?aid=".$user_id);
+            }
             $this->layout = '//layouts/column2';
             $upcomingConcerts = Yii::app()->db->createCommand()
                 // ->select('co.course_name, cl.section_id')

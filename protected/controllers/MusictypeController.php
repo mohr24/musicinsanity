@@ -114,7 +114,7 @@ class MusictypeController extends Controller
                 }
             }
             //when done
-            $this->redirect(array('artist/'.$aid));
+            $this->redirect(array('site/index'));
         }
         else {
             $this->render('choose_type', array(
@@ -146,7 +146,7 @@ class MusictypeController extends Controller
                 
             }
             //when done
-            $this->redirect(array('user/'.$uid));
+            $this->redirect(array('site/index'));
         }
         $this->render('choose_type', array(
                                      'types'=>$types,

@@ -194,9 +194,9 @@ class ListController extends Controller
             $concertList->attributes=$_POST['ConcertList'];
             $concertList->cid=$cid;
             if(ConcertList::model()->exists('lid = :lid and cid = :cid',array(':lid'=>$concertList->lid,':cid'=>$concertList->cid))){
-                $this->reload();
+                $this->refresh();
             }else if($concertList->save()){
-                $this->redirect(Yii::app()->baseUrl.$return);
+                $this->redirect(Yii::app()->baseUrl.'/index.php/list/'.$concertList->lid);
             }else{
                 print_r($concertList->getErrors());
             }

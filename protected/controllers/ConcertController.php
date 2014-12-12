@@ -107,8 +107,18 @@ class ConcertController extends Controller
 			$model->attributes=$_POST['Concert'];
             $model->aid=$aid;
             $model->concert_tp = new CDbExpression('CURRENT_DATE()');
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->cid));
+			if($model->save()){
+                $artistMusictypes = Artist::model()->find('aid = :aid',array(':aid'=>$aid))->musictypes;
+                foreach($artistMusictypes as $musictype){
+                    $concertMusictype = new ConcertMusictype();
+                    $concertMusictype->cid = $model->cid;
+                    $concertMusictype->type_name= $musictype->type_name;
+                    if(!$concertMusictype->save())
+                        print_r($concertMusictype->getErrors());
+                }
+                $this->redirect(array('view','id'=>$model->cid));
+            }
+
 		}
 
 		$this->render('create',array(
@@ -128,8 +138,15 @@ class ConcertController extends Controller
             $model->attributes=$_POST['Concert'];
             $model->submitted_by_uid = Yii::app()->user->id;
             $model->concert_tp = new CDbExpression('CURRENT_DATE()');
-            if($model->save())
-                $this->redirect(array('//list/add','cid'=>$model->cid, 'return'=>"home"));
+            if($model->save()){
+                $currentuser = User::model()->findByPk(Yii::app()->user->getId());
+                $currentuser->reputation += 0.1;
+                $currentuser->save();
+                Yii::app()->user->reputation=$currentuser->reputation += 0.1;
+
+                $this->redirect(array('//list/add','cid'=>$model->cid, 'return'=>substr(Yii::app()->request->url, strlen(Yii::app()->baseUrl))));
+            }
+
         }
         
         $this->render('create_user',array(
@@ -303,11 +320,16 @@ class ConcertController extends Controller
 
         if(isset($_POST['UserConcert']))
         {
-
             $userConcert->attributes=$_POST['UserConcert'];
             $userConcert->attend_tp = new CDbExpression('CURRENT_DATE()');
-            if($userConcert->save())
+            if($userConcert->save()){
+                $currentuser = User::model()->findByPk(Yii::app()->user->getId());
+                $currentuser->reputation += 0.1;
+                $currentuser->save();
+                Yii::app()->user->reputation=$currentuser->reputation += 0.1;
+
                 $this->redirect(Yii::app()->baseUrl.$return);
+            }
             else{
                 echo $userConcert->getErrors();
             }

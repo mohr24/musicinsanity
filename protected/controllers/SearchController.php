@@ -49,8 +49,7 @@ class SearchController extends Controller
                 // ->select('co.course_name, cl.section_id')
                 ->select('c.*, a.aid ,a.aname,v.vname,v.city, ')
                 ->from('concert c, artist a, venue v, concert_musictype m')
-                ->where('m.type_name  = :type and m.cid = c.cid and c.aid = a.aid and c.vid = v.vid and
-            (c.cdate between (CURRENT_DATE() + interval 30 day) and CURRENT_DATE())',
+                ->where('m.type_name  = :type and m.cid = c.cid and c.aid = a.aid and c.vid = v.vid',
                     array(':type'=>$type->type_name ))
                 ->queryAll();
             foreach($concertinfo as $i=>$concert){

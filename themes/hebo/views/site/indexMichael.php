@@ -4,13 +4,13 @@
 $this->pageTitle=Yii::app()->name;
     $reputation=Yii::app()->user->reputation;
     if($reputation >= 6){
-        $this->menu=array(array('label'=>'View Your List', 'url'=>array('/musicinsanity/index.php/list/index')), array('label'=>'Create User Concert', 'url'=>array('/musicinsanity/index.php/concert/createUser')));
+        $this->menu=array(array('label'=>'View Your Lists', 'url'=>array('/musicinsanity/index.php/list/index')), array('label'=>'Create User Concert', 'url'=>array('/musicinsanity/index.php/concert/createUser')));
     }
     else{
-        $this->menu=array(array('label'=>'View Your List', 'url'=>array('/musicinsanity/index.php/list/index')));
+        $this->menu=array(array('label'=>'View Your Lists', 'url'=>array('/musicinsanity/index.php/list/index')));
     }
     //DEBUG
-    $this->menu[]=array('label'=>'Edit the musicType', 'url'=>array('/musicinsanity/index.php/musictype/chooseUser?uid='.Yii::app()->user->id));
+    $this->menu[]=array('label'=>'Choose the Genres You Like', 'url'=>array('/musicinsanity/index.php/musictype/chooseUser?uid='.Yii::app()->user->id));
 ?>
 <h1>Upcoming Concerts</h1>
 <?php $this->widget('zii.widgets.CListView',array(
@@ -30,7 +30,7 @@ $this->pageTitle=Yii::app()->name;
 )); ?>
 <h5 style='float:right'><a href="/musicinsanity/index.php/concert/index?future=false"> View All Recent Concerts</a></h5>
 <br/>
-<h1>Concerts Recommended by your followers</h1>
+<h1>Recommended Concerts</h1>
 <?php $this->widget('zii.widgets.CListView',array(
 
     'dataProvider'=>$dataProviderRecommendedConcerts,
