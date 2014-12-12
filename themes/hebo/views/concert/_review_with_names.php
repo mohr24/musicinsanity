@@ -22,7 +22,7 @@
 <?php
     //echo $data['cid'];
     if(isset($data['reviewed'])){
-        if(strcmp ( $data['reviewed'], "No" )){
+        if(strcmp ( $data['reviewed'], "Yes" )){
             echo CHtml::button('Add My Review', array ('class'=>'btn btn-primary','style' => "margin-top: 20px;", 'submit'=>$this->createUrl('concert/review',array('id'=>$data['cid'], 'return'=>substr(Yii::app()->request->url, strlen(Yii::app()->baseUrl))))));
         }
         else {

@@ -19,7 +19,7 @@
 
 <?php
     //echo $data['cid'];
-    if(isset($data['attending'])){
+    if(isset($data['attending']) && $data['cdate'] >date("Y-m-d")){
     if(strcmp ( $data['attending'], "No" )){
         echo CHtml::button('Unattend', array ('class'=>'btn btn-primary','style' => "margin-top: 20px", 'submit'=>$this->createUrl('concert/unattend',array('id'=>$data['cid'], 'return'=>substr(Yii::app()->request->url, strlen(Yii::app()->baseUrl))))));
     }

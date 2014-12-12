@@ -37,12 +37,14 @@ if(isset($editProfile)){
     foreach ($model->musictypes as $i => $value) {
         $types[$i] = $value->type_name;
              }
-    $reputation = "Junior";
-    if($model->reputation > 6){
+    $reputation = "";
+    if($model->reputation >10){
         $reputation = "Insane";
     }
-    else {
+    else if($model->reputation > 5){
         $reputation = "Senior";
+    }else {
+        $reputation = "Junior";
     }
 
     $this->widget('zii.widgets.CDetailView', array(

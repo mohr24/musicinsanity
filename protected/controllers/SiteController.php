@@ -38,10 +38,11 @@ class SiteController extends Controller
             $this->layout = '//layouts/column2';
             $upcomingConcerts = Yii::app()->db->createCommand()
                 // ->select('co.course_name, cl.section_id')
-                ->select('c.*,a.aname, a.aid,v.vname, v.city')
-                ->from('concert c, artist a, venue v, user_artist ua')
-                ->where('ua.uid = :uid and ua.aid = a.aid and c.aid = a.aid and c.vid = v.vid and
-              (c.cdate between CURRENT_DATE() and (CURRENT_DATE() + interval 14 day)) ',
+                ->select('distinct(c.cid), c.*,a.aname, a.aid,v.vname, v.city')
+                ->from('concert c, artist a, venue v, user_artist ua, user_concert uc')
+                ->where('((ua.uid = :uid and ua.aid = a.aid) or (uc.uid = :uid and uc.cid = c.cid))
+                    and c.aid = a.aid and c.vid = v.vid and
+                  (c.cdate between CURRENT_DATE() and (CURRENT_DATE() + interval 14 day)) ',
                     array(':uid'=>$user_id,))
                 ->queryAll();
             //add attending column
@@ -89,7 +90,8 @@ class SiteController extends Controller
                 ->select('distinct(c.cid),c.*,a.aname, a.aid,v.vname, v.city, u2.uid as recommender_id, u2.uname as recommender_name')
                 ->from('concert c, artist a, venue v, user_follow uf, user u2, list l, concert_list cl')
                 ->where('uf.uid = :uid and uf.fuid = u2.uid and u2.uid = l.uid and l.lid = cl.lid and c.cid = cl.cid and c.aid = a.aid
-                    and c.vid = v.vid and c.cdate >= CURRENT_DATE()',
+                    and c.vid = v.vid and c.cdate >= CURRENT_DATE()
+                    and c.cid not in (select uc.cid from concert c, user_concert uc where uc.uid = :uid and uc.cid = c.cid)',
                     array(':uid'=>$user_id,))
                 ->queryAll();
             foreach($recommendedConcerts as $i=>$concert){
@@ -104,7 +106,8 @@ class SiteController extends Controller
                 ->select('distinct(c.cid),c.*,a.aname, a.aid,v.vname, v.city')
                 ->from('concert c, artist a, venue v, concert_musictype cm, user_musictype um, musictype m')
                 ->where('um.uid = :uid and um.type_name = cm.type_name and cm.cid = c.cid and c.aid = a.aid
-                    and c.vid = v.vid and c.cdate >= CURRENT_DATE()',
+                    and c.vid = v.vid and c.cdate >= CURRENT_DATE()
+                    and c.cid not in (select uc.cid from concert c, user_concert uc where uc.uid = :uid and uc.cid = c.cid)',
                     array(':uid'=>$user_id,))
                 ->queryAll();
             foreach($ConcertsInMusictype as $i=>$concert){

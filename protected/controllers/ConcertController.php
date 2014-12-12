@@ -65,15 +65,15 @@ class ConcertController extends Controller
             // ->select('co.course_name, cl.section_id')
             ->select('c.*,a.aname, a.aid,v.vname, v.city, u.uid,u.uname, uc.review, uc.rate')
             ->from('concert c, artist a, venue v, user_concert uc, user u')
-            ->where('c.cid = :cid and u.uid = uc.uid and uc.cid = c.cid and c.aid = a.aid and c.vid = v.vid and uc.review is not NULL and uc.rate is not NULL' ,
+            ->where('c.cid = :cid and u.uid = uc.uid and uc.cid = c.cid and c.aid = a.aid and c.vid = v.vid and (uc.review is not NULL or uc.rate is not NULL)' ,
                 array(':cid'=>$id,))
             ->queryAll();
         foreach($reviews as $i=>$concert){
             $userConcert = UserConcert::model()->find('uid=:uid and cid = :cid',array(':uid'=>Yii::app()->user->getId(),':cid'=>$concert['cid']));
             if(isset($userConcert->review)|| isset($userConcert->rate)){
-                $recentReviews[$i]['reviewed']="Yes";
+                $reviews[$i]['reviewed']="Yes";
             }else{
-                $recentReviews[$i]['reviewed']="No";
+                $reviews[$i]['reviewed']="No";
             }
         }
         $dataProviderReviews = new CArrayDataProvider($reviews, array(
@@ -140,9 +140,8 @@ class ConcertController extends Controller
             $model->concert_tp = new CDbExpression('CURRENT_DATE()');
             if($model->save()){
                 $currentuser = User::model()->findByPk(Yii::app()->user->getId());
-                $currentuser->reputation += 0.1;
-                $currentuser->save();
-                Yii::app()->user->reputation=$currentuser->reputation += 0.1;
+                $currentuser->saveAttributes(array('reputation'=>$currentuser->reputation+1));
+                $this->setState('reputation', $currentuser->reputation);
 
                 $this->redirect(array('//list/add','cid'=>$model->cid, 'return'=>substr(Yii::app()->request->url, strlen(Yii::app()->baseUrl))));
             }
@@ -324,9 +323,8 @@ class ConcertController extends Controller
             $userConcert->attend_tp = new CDbExpression('CURRENT_DATE()');
             if($userConcert->save()){
                 $currentuser = User::model()->findByPk(Yii::app()->user->getId());
-                $currentuser->reputation += 0.1;
-                $currentuser->save();
-                Yii::app()->user->reputation=$currentuser->reputation += 0.1;
+                $currentuser->saveAttributes(array('reputation'=>$currentuser->reputation+0.5));
+                $this->setState('reputation', $currentuser->reputation);
 
                 $this->redirect(Yii::app()->baseUrl.$return);
             }

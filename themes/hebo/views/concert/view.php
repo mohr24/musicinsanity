@@ -87,6 +87,6 @@ if($past){
 
     ));
 } ?>
-<h5 style='float:right'><a href="/musicinsanity/index.php/concert/index?future=false"> View All Recent Concerts</a></h5>
+
 <br/>
 
