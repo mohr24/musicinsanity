@@ -3,7 +3,7 @@
 
 $this->pageTitle=Yii::app()->name;
     $reputation=Yii::app()->user->reputation;
-    if($reputation >= 6){
+    if($reputation >= 5){
         $this->menu=array(array('label'=>'View Your Lists', 'url'=>array('/musicinsanity/index.php/list/index')), array('label'=>'Create User Concert', 'url'=>array('/musicinsanity/index.php/concert/createUser')));
     }
     else{

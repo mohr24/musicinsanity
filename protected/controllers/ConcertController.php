@@ -141,7 +141,7 @@ class ConcertController extends Controller
             if($model->save()){
                 $currentuser = User::model()->findByPk(Yii::app()->user->getId());
                 $currentuser->saveAttributes(array('reputation'=>$currentuser->reputation+1));
-                $this->setState('reputation', $currentuser->reputation);
+                Yii::app()->user->setState('reputation', $currentuser->reputation);
 
                 $this->redirect(array('//list/add','cid'=>$model->cid, 'return'=>substr(Yii::app()->request->url, strlen(Yii::app()->baseUrl))));
             }
@@ -324,7 +324,7 @@ class ConcertController extends Controller
             if($userConcert->save()){
                 $currentuser = User::model()->findByPk(Yii::app()->user->getId());
                 $currentuser->saveAttributes(array('reputation'=>$currentuser->reputation+0.5));
-                $this->setState('reputation', $currentuser->reputation);
+                Yii::app()->user->setState('reputation', $currentuser->reputation);
 
                 $this->redirect(Yii::app()->baseUrl.$return);
             }
